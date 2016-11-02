@@ -19,7 +19,7 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
     
     @IBOutlet weak var swPreservar: UISwitch!
     
-    let preferencias = NSUserDefaults.standardUserDefaults()
+    let preferencias = UserDefaults.standard
 
     let dflPresupuestoLookingFor = "nameOfBudgetLookingFor"
     
@@ -44,9 +44,9 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
     let datePickerIni: UIDatePicker = UIDatePicker()
     let datePickerFin: UIDatePicker = UIDatePicker()
     
-    let dateFormatter: NSDateFormatter = NSDateFormatter()
-    let formatterMon : NSNumberFormatter = NSNumberFormatter()
-    let formatterFlt : NSNumberFormatter = NSNumberFormatter()
+    let dateFormatter: DateFormatter = DateFormatter()
+    let formatterMon : NumberFormatter = NumberFormatter()
+    let formatterFlt : NumberFormatter = NumberFormatter()
     
     var boolGuardado: Bool = false
 
@@ -65,7 +65,7 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
         
         self.lblUmbral.text = "0.0 %"
 
-        self.stpUmbral.continuous = false
+        self.stpUmbral.isContinuous = false
         self.stpUmbral.stepValue = 5
     }
     
@@ -89,8 +89,8 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
 
         // Do any additional setup after loading the view.
         let sublayer = CALayer.init()
-        sublayer.backgroundColor = UIColor.customLightGrayColor().CGColor
-        sublayer.shadowOffset = CGSizeMake(0, 3)
+        sublayer.backgroundColor = UIColor.customLightGrayColor().cgColor
+        sublayer.shadowOffset = CGSize(width: 0, height: 3)
         sublayer.shadowRadius = 5.0
         //sublayer.shadowColor = [UIColor blackColor].CGColor;
         sublayer.shadowOpacity = 0.8;
@@ -118,96 +118,96 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
     func initFormatters() {
         dateFormatter.dateFormat = "dd/MM/yyyy"
         
-        formatterMon.numberStyle = .CurrencyStyle
+        formatterMon.numberStyle = .currency
         formatterMon.maximumFractionDigits = 2
         
-        formatterFlt.numberStyle = .NoStyle
+        formatterFlt.numberStyle = .none
         formatterFlt.maximumFractionDigits = 2
     }
     
     // MARK: - Inicializador de los UIDatePickers
     func initDatePickers() {
-        datePickerIni.date = NSDate()
-        datePickerIni.datePickerMode = UIDatePickerMode.Date
+        datePickerIni.date = Date()
+        datePickerIni.datePickerMode = UIDatePickerMode.date
         //datePickerIni.addTarget(self, action: #selector(TVCPresupuesto.handleDatePickerIni(_:)), forControlEvents: UIControlEvents.ValueChanged)
         self.txtFechaIni.inputView = datePickerIni
         
         let tbFechaIni         = UIToolbar()
-        tbFechaIni.barStyle    = UIBarStyle.Default
-        tbFechaIni.translucent = true
+        tbFechaIni.barStyle    = UIBarStyle.default
+        tbFechaIni.isTranslucent = true
         
         //toolBar.tintColor = UIColor.whiteColor()
         tbFechaIni.sizeToFit()
         
-        let btnDoneFI = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(self.handleDatePickerIni(_:)))
-        let btnSpaceFI = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-        let btnCancelFI = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(self.handleDatePickerIni(_:)))
+        let btnDoneFI = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.handleDatePickerIni(_:)))
+        let btnSpaceFI = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let btnCancelFI = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.handleDatePickerIni(_:)))
         
         tbFechaIni.setItems([btnCancelFI, btnSpaceFI, btnDoneFI], animated: false)
-        tbFechaIni.userInteractionEnabled = true
+        tbFechaIni.isUserInteractionEnabled = true
         
         self.txtFechaIni.inputAccessoryView = tbFechaIni
         
         
-        datePickerFin.date = NSDate()
-        datePickerFin.datePickerMode = UIDatePickerMode.Date
+        datePickerFin.date = Date()
+        datePickerFin.datePickerMode = UIDatePickerMode.date
         //datePickerFin.addTarget(self, action: #selector(TVCPresupuesto.handleDatePickerFin(_:)), forControlEvents: UIControlEvents.ValueChanged)
         self.txtFechaFin.inputView = datePickerFin
         
         let tbFechaFin         = UIToolbar()
-        tbFechaFin.barStyle    = UIBarStyle.Default
-        tbFechaFin.translucent = true
+        tbFechaFin.barStyle    = UIBarStyle.default
+        tbFechaFin.isTranslucent = true
         
         //toolBar.tintColor = UIColor.whiteColor()
         //UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
         tbFechaFin.sizeToFit()
         
-        let btnDoneFF = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(self.handleDatePickerFin(_:)))
-        let btnSpaceFF = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-        let btnCancelFF = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(self.handleDatePickerFin(_:)))
+        let btnDoneFF = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.handleDatePickerFin(_:)))
+        let btnSpaceFF = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let btnCancelFF = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.handleDatePickerFin(_:)))
         
         tbFechaFin.setItems([btnCancelFF, btnSpaceFF, btnDoneFF], animated: false)
-        tbFechaFin.userInteractionEnabled = true
+        tbFechaFin.isUserInteractionEnabled = true
         
         self.txtFechaFin.inputAccessoryView = tbFechaFin
     }
     
     // MARK: - Carga los datos del presupuesto en modo edición
     func loadPresupuesto() {
-        if let strPresupuestoNombre = preferencias.valueForKey(dflPresupuestoLookingFor) as? String? {
+        if let strPresupuestoNombre = preferencias.value(forKey: dflPresupuestoLookingFor) as? String? {
             if strPresupuestoNombre != nil {
                 if !strPresupuestoNombre!.isEmpty {
-                    preferencias.setObject(nil, forKey: dflPresupuestoLookingFor)
+                    preferencias.set(nil, forKey: dflPresupuestoLookingFor)
                     
                     let predicado: NSPredicate =  NSPredicate(format: " descripcion = %@ ", argumentArray: [strPresupuestoNombre!])
                     
                     // Initialize Fetch Request
-                    let fetchRequest = NSFetchRequest(entityName: smModelo.smPresupuesto.entityName)
+                    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: smModelo.smPresupuesto.entityName)
                     
                     // Create Entity Description
                     // Configure Fetch Request
-                    fetchRequest.entity = NSEntityDescription.entityForName(smModelo.smPresupuesto.entityName, inManagedObjectContext: self.moc
+                    fetchRequest.entity = NSEntityDescription.entity(forEntityName: smModelo.smPresupuesto.entityName, in: self.moc
                     )
                     
                     fetchRequest.predicate = predicado
                     
                     do {
-                        self.presupuestos = try self.moc.executeFetchRequest(fetchRequest)
+                        self.presupuestos = try self.moc.fetch(fetchRequest)
                         //print(presupuestos)
                         
                         self.presupuesto = self.presupuestos.first! as? Presupuesto
                         
                         if self.presupuesto == nil {
-                            presupuesto = NSEntityDescription.insertNewObjectForEntityForName(smModelo.smPresupuesto.entityName, inManagedObjectContext: moc) as? Presupuesto
+                            presupuesto = NSEntityDescription.insertNewObject(forEntityName: smModelo.smPresupuesto.entityName, into: moc) as? Presupuesto
                         } else {
                             self.txtPresupuestoNombre.text = self.presupuesto?.descripcion
                             
-                            self.txtFechaIni.text = dateFormatter.stringFromDate((self.presupuesto?.fechaInicio)!)
-                            self.txtFechaFin.text = dateFormatter.stringFromDate((self.presupuesto?.fechaFinal)!)
+                            self.txtFechaIni.text = dateFormatter.string(from: (self.presupuesto?.fechaInicio)! as Date)
+                            self.txtFechaFin.text = dateFormatter.string(from: (self.presupuesto?.fechaFinal)! as Date)
                             
-                            self.txtPresupuesto.text = formatterMon.stringFromNumber(self.presupuesto!.valor!)
+                            self.txtPresupuesto.text = formatterMon.string(from: self.presupuesto!.valor!)
                             
-                            self.lblUmbral.text = formatterFlt.stringFromNumber((self.presupuesto?.umbral!)!)! + " %"
+                            self.lblUmbral.text = formatterFlt.string(from: (self.presupuesto?.umbral!)!)! + " %"
                             
                             self.stpUmbral.value = (self.presupuesto?.umbral!.doubleValue)!
                         }
@@ -237,8 +237,8 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
             
             repeat {
                 if sections.count > 0 {
-                    let strSeccion = sections[item].valueForKey(self.smModelo.smPresupuestoSeccion.colDescripcion) as! String
-                    self.txtvSections.text.appendContentsOf("\(strSeccion)\n")
+                    let strSeccion = sections[item].value(forKey: self.smModelo.smPresupuestoSeccion.colDescripcion) as! String
+                    self.txtvSections.text.append("\(strSeccion)\n")
                 }
                 item += 1
             } while (item < sections.count)
@@ -246,42 +246,42 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
         
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         preferencias.synchronize()
 
         loadSections()
     }
     
-    @IBAction func swPreservarOnValueChanged(sender: UISwitch) {
+    @IBAction func swPreservarOnValueChanged(_ sender: UISwitch) {
         if self.presupuesto != nil {
-            self.presupuesto?.setValue(sender.on, forKey: smModelo.smPresupuesto.colPreservar)
+            self.presupuesto?.setValue(sender.isOn, forKey: smModelo.smPresupuesto.colPreservar)
         }
 }
     
     
-    @IBAction func stpUmbralOnValueChanged(sender: UIStepper) {
+    @IBAction func stpUmbralOnValueChanged(_ sender: UIStepper) {
         
         self.lblUmbral.text = sender.value.description + " %"
 
         if self.presupuesto != nil {
-            self.presupuesto?.setValue(formatterFlt.numberFromString(sender.value.description), forKey: smModelo.smPresupuesto.colUmbral)
+            self.presupuesto?.setValue(formatterFlt.number(from: sender.value.description), forKey: smModelo.smPresupuesto.colUmbral)
         }
     }
     
     // MARK: - Manipulación de DatePickers
-    func handleDatePickerIni(sender: UITextField) {
+    func handleDatePickerIni(_ sender: UITextField) {
         let picker: UIDatePicker = txtFechaIni.inputView as! UIDatePicker
         
-        txtFechaIni.text = dateFormatter.stringFromDate(picker.date)
+        txtFechaIni.text = dateFormatter.string(from: picker.date)
         
         presupuesto?.setValue(picker.date, forKey: smModelo.smPresupuesto.colFechaIni)
         
         txtFechaIni.resignFirstResponder()
     }
     
-    func handleDatePickerFin(sender: UITextField) {
+    func handleDatePickerFin(_ sender: UITextField) {
         let picker: UIDatePicker = txtFechaFin.inputView as! UIDatePicker
-        txtFechaFin.text = dateFormatter.stringFromDate(picker.date)
+        txtFechaFin.text = dateFormatter.string(from: picker.date)
         
         presupuesto?.setValue(picker.date, forKey: smModelo.smPresupuesto.colFechaFin)
         
@@ -289,18 +289,18 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
     }
 
     // MARK: - Validación de formato numérico
-    func validarValorNumericoMon(txtValor: String?) -> Bool {
+    func validarValorNumericoMon(_ txtValor: String?) -> Bool {
         
         var boolResultado: Bool = true
         var douValor: Double?
         
         if !(txtValor?.isEmpty)! {
-            douValor = formatterFlt.numberFromString(txtValor!)?.doubleValue
+            douValor = formatterFlt.number(from: txtValor!)?.doubleValue
 
-            if formatterFlt.numberFromString(txtValor!)?.doubleValue == nil {
-                douValor = formatterMon.numberFromString(txtValor!)?.doubleValue
+            if formatterFlt.number(from: txtValor!)?.doubleValue == nil {
+                douValor = formatterMon.number(from: txtValor!)?.doubleValue
             } else {
-                douValor = formatterFlt.numberFromString(txtValor!)?.doubleValue
+                douValor = formatterFlt.number(from: txtValor!)?.doubleValue
             }
             
             if douValor == nil {
@@ -322,17 +322,17 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
         
         
         // Initialize Fetch Request
-        let fetchRequest = NSFetchRequest(entityName: smModelo.smPresupuesto.entityName)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: smModelo.smPresupuesto.entityName)
         
         // Create Entity Description
         // Configure Fetch Request
-        fetchRequest.entity = NSEntityDescription.entityForName(smModelo.smPresupuesto.entityName, inManagedObjectContext: self.moc
+        fetchRequest.entity = NSEntityDescription.entity(forEntityName: smModelo.smPresupuesto.entityName, in: self.moc
         )
         
         fetchRequest.predicate = predicado
         
         do {
-            let resultados = try self.moc.executeFetchRequest(fetchRequest)
+            let resultados = try self.moc.fetch(fetchRequest)
             
             boolExiste = (resultados.count > 0)
             
@@ -344,12 +344,12 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
     }
 
     // MARK: - Preparación de los datos del presupuesto para guardar el nuevo registro o los cambios realizados
-    func prepararPresupuesto(inout isPresupuestoReady isComplete: Bool) {
+    func prepararPresupuesto(isPresupuestoReady isComplete: inout Bool) {
         var mensaje: String?
         isComplete = true
         
         if self.presupuesto == nil {
-            if !self.txtPresupuestoNombre.hasText() {
+            if !self.txtPresupuestoNombre.hasText {
                 mensaje = "You must enter the name of the budget"
                 isComplete = false
                 showCustomWarningAlert(mensaje!, toFocus: self.txtPresupuestoNombre)
@@ -364,19 +364,19 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
                 }
             }
             
-            if !self.txtFechaIni.hasText() {
+            if !self.txtFechaIni.hasText {
                 mensaje = "You must enter the start date of the budget."
                 isComplete = false
                 showCustomWarningAlert(mensaje!, toFocus: self.txtFechaIni)
             }
             
-            if !self.txtFechaFin.hasText() {
+            if !self.txtFechaFin.hasText {
                 mensaje = "You must enter the final date of the budget."
                 isComplete = false
                 showCustomWarningAlert(mensaje!, toFocus: self.txtFechaFin)
             }
             
-            if !self.txtPresupuesto.hasText() {
+            if !self.txtPresupuesto.hasText {
                 mensaje = "You must enter the value of the budget."
                 isComplete = false
                 showCustomWarningAlert(mensaje!, toFocus: self.txtPresupuesto)
@@ -384,15 +384,15 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
             
            if isComplete {
                 //self.presupuesto = nil
-                self.presupuesto = NSEntityDescription.insertNewObjectForEntityForName(self.smModelo.smPresupuesto.entityName, inManagedObjectContext: self.moc) as? Presupuesto
+                self.presupuesto = NSEntityDescription.insertNewObject(forEntityName: self.smModelo.smPresupuesto.entityName, into: self.moc) as? Presupuesto
             
                 self.presupuesto!.setValue(self.txtPresupuestoNombre.text, forKey: smModelo.smPresupuesto.colDescripcion)
-                self.presupuesto!.setValue(dateFormatter.dateFromString(self.txtFechaIni.text!), forKey: smModelo.smPresupuesto.colFechaIni)
-                self.presupuesto!.setValue(dateFormatter.dateFromString(self.txtFechaFin.text!), forKey: smModelo.smPresupuesto.colFechaFin)
-                self.presupuesto!.setValue(formatterMon.numberFromString(self.txtPresupuesto.text!), forKey: smModelo.smPresupuesto.colValor)
+                self.presupuesto!.setValue(dateFormatter.date(from: self.txtFechaIni.text!), forKey: smModelo.smPresupuesto.colFechaIni)
+                self.presupuesto!.setValue(dateFormatter.date(from: self.txtFechaFin.text!), forKey: smModelo.smPresupuesto.colFechaFin)
+                self.presupuesto!.setValue(formatterMon.number(from: self.txtPresupuesto.text!), forKey: smModelo.smPresupuesto.colValor)
                 self.presupuesto!.setValue(self.stpUmbral.value, forKey: smModelo.smPresupuesto.colUmbral)
             
-                self.presupuesto?.setValue(swPreservar.on, forKey: smModelo.smPresupuesto.colPreservar)
+                self.presupuesto?.setValue(swPreservar.isOn, forKey: smModelo.smPresupuesto.colPreservar)
 
                 self.presupuesto?.setValue(true, forKey: smModelo.smPresupuesto.colActivo)
             }
@@ -416,54 +416,54 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
         return canISave
     }
     
-    @IBAction func btnSectionsOnTouchInDown(sender: UIBarButtonItem) {
+    @IBAction func btnSectionsOnTouchInDown(_ sender: UIBarButtonItem) {
 
         self.boolGuardado = self.guardarPresupuesto()
         
         if self.boolGuardado {
-            preferencias.setObject(self.presupuesto?.descripcion, forKey: dflPresupuestoLookingFor)
+            preferencias.set(self.presupuesto?.descripcion, forKey: dflPresupuestoLookingFor)
             
             preferencias.synchronize()
             
-            self.performSegueWithIdentifier("segueSections", sender: self)
+            self.performSegue(withIdentifier: "segueSections", sender: self)
         }
     }
     
-    @IBAction func txtPresupuestoNombreOnEditingDidEnd(sender: UITextField) {
-        if sender.hasText() {
+    @IBAction func txtPresupuestoNombreOnEditingDidEnd(_ sender: UITextField) {
+        if sender.hasText {
             presupuesto?.setValue(sender.text, forKey: smModelo.smPresupuesto.colDescripcion)
         }
     }
     
 
     // MARK: - Alerta personalizada
-    func showCustomWarningAlert(strMensaje: String, toFocus: UITextField) {
+    func showCustomWarningAlert(_ strMensaje: String, toFocus: UITextField) {
         
-        let alertController = UIAlertController(title: strAppTitle, message: strMensaje, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: strAppTitle, message: strMensaje, preferredStyle: UIAlertControllerStyle.alert)
             
-        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel,handler: {_ in toFocus.becomeFirstResponder()})
+        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.cancel,handler: {_ in toFocus.becomeFirstResponder()})
             
         alertController.addAction(action)
             
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
 
     // MARK: - Validación de la entrada númerica del valor del presupuesto
-    @IBAction func txtPresupuestoOnEditingDidEnd(sender: UITextField) {
+    @IBAction func txtPresupuestoOnEditingDidEnd(_ sender: UITextField) {
         var esValido: Bool = true
-        if sender.hasText() {
+        if sender.hasText {
             esValido = validarValorNumericoMon(sender.text)
             if esValido == false {
                 showCustomWarningAlert("Please, check out the mount of money.  It is not valid!.", toFocus: sender)
             } else {
                 //print("Log: \(sender.text!) es un número válido!")
                 var monto: Double? // = formatterFlt.numberFromString(sender.text!)!.doubleValue
-                if formatterFlt.numberFromString(sender.text!)?.doubleValue == nil {
-                    monto = formatterMon.numberFromString(sender.text!)?.doubleValue
+                if formatterFlt.number(from: sender.text!)?.doubleValue == nil {
+                    monto = formatterMon.number(from: sender.text!)?.doubleValue
                 } else {
-                    monto = formatterFlt.numberFromString(sender.text!)?.doubleValue
+                    monto = formatterFlt.number(from: sender.text!)?.doubleValue
                 }
-                sender.text = formatterMon.stringFromNumber(monto!)
+                sender.text = formatterMon.string(from: NSNumber.init(value: monto!))
                 presupuesto?.setValue(monto, forKey: smModelo.smPresupuesto.colValor)
             }
         }
@@ -476,12 +476,12 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
     }
     
     // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if self.boolGuardado {
             if segue.identifier == "segueSections" {
-                preferencias.setObject(self.presupuesto?.descripcion, forKey: dflPresupuestoLookingFor)
-                let vcCategoria: TVCCategoria = segue.destinationViewController as! TVCCategoria
+                preferencias.set(self.presupuesto?.descripcion, forKey: dflPresupuestoLookingFor)
+                let vcCategoria: TVCCategoria = segue.destination as! TVCCategoria
                 vcCategoria.presupuesto = self.presupuesto
                 vcCategoria.moc         = self.moc
             }

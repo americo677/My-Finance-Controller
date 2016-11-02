@@ -16,7 +16,7 @@ class TVCPresupuestos: UITableViewController {
     @IBOutlet weak var btnBudget: UIBarButtonItem!
     
     
-    let preferencias = NSUserDefaults.standardUserDefaults()
+    let preferencias = UserDefaults.standard
 
     let dflPresupuestoLookingFor = "nameOfBudgetLookingFor"
 
@@ -38,17 +38,17 @@ class TVCPresupuestos: UITableViewController {
     
     let MAX_ROW_HEIGHT: CGFloat = 93
     
-    let formatterMon : NSNumberFormatter = NSNumberFormatter()
-    let formatterFlt : NSNumberFormatter = NSNumberFormatter()
-    var indexSelected: NSIndexPath = NSIndexPath()
+    let formatterMon : NumberFormatter = NumberFormatter()
+    let formatterFlt : NumberFormatter = NumberFormatter()
+    var indexSelected: IndexPath = IndexPath()
     
-    let dateFormatter: NSDateFormatter = NSDateFormatter()
+    let dateFormatter: DateFormatter = DateFormatter()
     
     func initFormatters() {
         dateFormatter.dateFormat = "dd/MM/yyyy"
-        formatterMon.numberStyle = .CurrencyStyle
+        formatterMon.numberStyle = .currency
         formatterMon.maximumFractionDigits = 2
-        formatterFlt.numberStyle = .NoStyle
+        formatterFlt.numberStyle = .none
         formatterFlt.maximumFractionDigits = 2
     }
 
@@ -56,19 +56,19 @@ class TVCPresupuestos: UITableViewController {
     func fetchPresupuestos() {
         
         // Initialize Fetch Request
-        let fetchRequest = NSFetchRequest(entityName: smModelo.smPresupuesto.entityName)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: smModelo.smPresupuesto.entityName)
         
         let predicado: NSPredicate =  NSPredicate(format: " activo = true ")
 
         // Create Entity Description
         // Configure Fetch Request
-        fetchRequest.entity = NSEntityDescription.entityForName(smModelo.smPresupuesto.entityName, inManagedObjectContext: self.moc
+        fetchRequest.entity = NSEntityDescription.entity(forEntityName: smModelo.smPresupuesto.entityName, in: self.moc
         )
         
         fetchRequest.predicate = predicado
 
         do {
-            self.presupuestos = try self.moc.executeFetchRequest(fetchRequest)
+            self.presupuestos = try self.moc.fetch(fetchRequest)
         } catch {
             let fetchError = error as NSError
             print(fetchError)
@@ -80,19 +80,19 @@ class TVCPresupuestos: UITableViewController {
         //self.tvPresupuestos.frame.size.width = 500
     }
     
-    func getPath(fileName: String) -> String {
-        let documentsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
-        let fileURL = documentsURL.URLByAppendingPathComponent(fileName)
-        return fileURL.path!
+    func getPath(_ fileName: String) -> String {
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL = documentsURL.appendingPathComponent(fileName)
+        return fileURL.path
     }
 
     // MARK: - Carga inicial de datos JSON
     func loadInitJSON() {
-        if let dataPath = NSBundle.mainBundle().pathForResource("initialbudget", ofType: "json") {
+        if let dataPath = Bundle.main.path(forResource: "initialbudget", ofType: "json") {
             do {
-                let jsonData = try NSData(contentsOfFile: dataPath, options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                let jsonData = try Data(contentsOf: URL(fileURLWithPath: dataPath), options: NSData.ReadingOptions.mappedIfSafe)
                 do {
-                    let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                    let jsonResult: NSDictionary = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
                     
                     if let budgetsJSON : [NSDictionary] = jsonResult["Presupuesto"] as? [NSDictionary] {
                         for budgetJSON: NSDictionary in budgetsJSON {
@@ -120,10 +120,10 @@ class TVCPresupuestos: UITableViewController {
         self.presupuesto = nil
     }
     
-    func loadInitJSONPresupuesto(budget: NSDictionary) -> Presupuesto {
+    func loadInitJSONPresupuesto(_ budget: NSDictionary) -> Presupuesto {
         //print("Presupuesto: \(budget)")
         
-        let presupuesto = NSEntityDescription.insertNewObjectForEntityForName(self.smModelo.smPresupuesto.entityName, inManagedObjectContext: self.moc) as? Presupuesto
+        let presupuesto = NSEntityDescription.insertNewObject(forEntityName: self.smModelo.smPresupuesto.entityName, into: self.moc) as? Presupuesto
         
         for (name, value) in budget {
             
@@ -132,11 +132,11 @@ class TVCPresupuestos: UITableViewController {
             }
 
             if name as! String == smModelo.smPresupuesto.colFechaIni {
-                presupuesto!.setValue(dateFormatter.dateFromString(value as! String), forKey: smModelo.smPresupuesto.colFechaIni)
+                presupuesto!.setValue(dateFormatter.date(from: value as! String), forKey: smModelo.smPresupuesto.colFechaIni)
             }
             
             if name as! String == smModelo.smPresupuesto.colFechaFin {
-                presupuesto!.setValue(dateFormatter.dateFromString(value as! String), forKey: smModelo.smPresupuesto.colFechaFin)
+                presupuesto!.setValue(dateFormatter.date(from: value as! String), forKey: smModelo.smPresupuesto.colFechaFin)
             }
 
             if name as! String == smModelo.smPresupuesto.colIngresos {
@@ -171,13 +171,13 @@ class TVCPresupuestos: UITableViewController {
                 }
             }
             
-            let lpsSeccion = presupuesto?.mutableSetValueForKey(self.smModelo.smPresupuesto.colSecciones)
+            let lpsSeccion = presupuesto?.mutableSetValue(forKey: self.smModelo.smPresupuesto.colSecciones)
             
             if name as! String == "secciones" {
                 if let secciones : [NSDictionary] = budget["secciones"] as? [NSDictionary] {
                     for seccion: NSDictionary in secciones {
                         let iSeccion = self.loadInitJSONSeccion(seccion)
-                        lpsSeccion?.addObject(iSeccion)
+                        lpsSeccion?.add(iSeccion)
                     }
                     presupuesto?.setValue(lpsSeccion, forKey: self.smModelo.smPresupuesto.colSecciones)
                 }
@@ -186,10 +186,10 @@ class TVCPresupuestos: UITableViewController {
         return presupuesto!
     }
     
-    func loadInitJSONSeccion(section: NSDictionary) -> PresupuestoSeccion {
+    func loadInitJSONSeccion(_ section: NSDictionary) -> PresupuestoSeccion {
         //print("sección: \(section)")
 
-        let seccion = NSEntityDescription.insertNewObjectForEntityForName(self.smModelo.smPresupuestoSeccion.entityName, inManagedObjectContext: self.moc) as? PresupuestoSeccion
+        let seccion = NSEntityDescription.insertNewObject(forEntityName: self.smModelo.smPresupuestoSeccion.entityName, into: self.moc) as? PresupuestoSeccion
         
         for (name, value) in section {
             
@@ -209,13 +209,13 @@ class TVCPresupuestos: UITableViewController {
                 seccion!.setValue(self.presupuesto, forKey: smModelo.smPresupuestoSeccion.colPresupuesto)
             }
             
-            let lpsRecibo = seccion?.mutableSetValueForKey(self.smModelo.smPresupuestoSeccion.colRecibos)
+            let lpsRecibo = seccion?.mutableSetValue(forKey: self.smModelo.smPresupuestoSeccion.colRecibos)
 
             if name as! String == "recibos" {
                 if let recibos : [NSDictionary] = section["recibos"] as? [NSDictionary] {
                     for recibo: NSDictionary in recibos {
                         let iRecibo = self.loadInitJSONRecibo(recibo, seccion: seccion!)
-                        lpsRecibo?.addObject(iRecibo)
+                        lpsRecibo?.add(iRecibo)
                     }
                     seccion?.setValue(lpsRecibo, forKey: self.smModelo.smPresupuestoSeccion.colRecibos)
                 }
@@ -224,10 +224,10 @@ class TVCPresupuestos: UITableViewController {
         return seccion!
     }
     
-    func loadInitJSONRecibo(receipt: NSDictionary, seccion: PresupuestoSeccion) -> Recibo {
+    func loadInitJSONRecibo(_ receipt: NSDictionary, seccion: PresupuestoSeccion) -> Recibo {
         //print("recibo: \(receipt)")
         
-        let recibo = NSEntityDescription.insertNewObjectForEntityForName(self.smModelo.smRecibo.entityName, inManagedObjectContext: self.moc) as? Recibo
+        let recibo = NSEntityDescription.insertNewObject(forEntityName: self.smModelo.smRecibo.entityName, into: self.moc) as? Recibo
 
         for (name, value) in receipt {
             
@@ -236,7 +236,7 @@ class TVCPresupuestos: UITableViewController {
             }
             
             if name as! String == smModelo.smRecibo.colFecha {
-                recibo!.setValue(dateFormatter.dateFromString(value as! String), forKey: smModelo.smRecibo.colFecha)
+                recibo!.setValue(dateFormatter.date(from: value as! String), forKey: smModelo.smRecibo.colFecha)
             }
             
             if name as! String == smModelo.smRecibo.colTipo {
@@ -268,11 +268,11 @@ class TVCPresupuestos: UITableViewController {
         self.initTableViewRowHeight()
         
         let sublayer = CALayer.init()
-        sublayer.backgroundColor = UIColor.customLightGrayColor().CGColor
-        sublayer.shadowOffset = CGSizeMake(0, 3)
+        sublayer.backgroundColor = UIColor.customLightGrayColor().cgColor
+        sublayer.shadowOffset = CGSize(width: 0, height: 3)
         sublayer.shadowRadius = 5.0
         sublayer.shadowOpacity = 0.8;
-        sublayer.frame = CGRectMake(0, 0, 420, 42000)
+        sublayer.frame = CGRect(x: 0, y: 0, width: 420, height: 42000)
         self.view.layer.addSublayer(sublayer)
         
         tvPresupuestos.delegate = self
@@ -280,14 +280,14 @@ class TVCPresupuestos: UITableViewController {
         
         tvPresupuestos.allowsSelectionDuringEditing = true
         
-        let fltExecTimes = preferencias.floatForKey(prefExecTimes)
+        let fltExecTimes = preferencias.float(forKey: prefExecTimes)
         
         if fltExecTimes == 0 {
             // Sólo se realiza en el primer lanzamiento de la app
             self.loadInitJSON()
         }
 
-        preferencias.setFloat(fltExecTimes + 1, forKey: prefExecTimes)
+        preferencias.set(fltExecTimes + 1, forKey: prefExecTimes)
 
         //print ("Ejecuciones: \(fltExecTimes + 1)")
 
@@ -307,12 +307,12 @@ class TVCPresupuestos: UITableViewController {
         self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        self.navigationItem.leftBarButtonItem = self.editButtonItem()
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
         
         //self.navigationItem.leftBarButtonItem?.action = #selector(self.setEnableDisableButton)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.fetchPresupuestos()
         
@@ -328,12 +328,12 @@ class TVCPresupuestos: UITableViewController {
         #endif
 
         #if FULL_VERSION
-            self.btnBudget.enabled = true
+            self.btnBudget.isEnabled = true
         #endif
     }
     
-    override func viewDidAppear(animated: Bool) {
-        self.tvPresupuestos.deselectRowAtIndexPath(indexSelected, animated: true)
+    override func viewDidAppear(_ animated: Bool) {
+        self.tvPresupuestos.deselectRow(at: indexSelected, animated: true)
         self.tvPresupuestos.reloadData()
     }
     
@@ -344,25 +344,25 @@ class TVCPresupuestos: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return strTituloLista
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         //return 1
         return self.presupuestos.count
     }
     
     // MARK: - Celda personalizada
-    func customTableView(ctableView: UITableView, cindexPath: NSIndexPath, cpresupuesto: Presupuesto, caccessoryType: UITableViewCellAccessoryType) -> UITableViewCell {
+    func customTableView(_ ctableView: UITableView, cindexPath: IndexPath, cpresupuesto: Presupuesto, caccessoryType: UITableViewCellAccessoryType) -> UITableViewCell {
 
-        let cell = tableView.dequeueReusableCellWithIdentifier("CustomTableViewCell", forIndexPath: cindexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: cindexPath)
         
         // Para evitar el re-writting de los labels personalizados
         for cellView in cell.contentView.subviews {
@@ -370,36 +370,36 @@ class TVCPresupuestos: UITableViewController {
         }
         
         //let labelTitle     : UILabel = UILabel(frame: CGRectMake(0.0, 0.0, 377.0, 35.0))
-        let labelTitle     : UILabel = UILabel(frame: CGRectMake(0.0, 0.0, 339.0, 35.0))
-        labelTitle.lineBreakMode = .ByTruncatingTail
+        let labelTitle     : UILabel = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 339.0, height: 35.0))
+        labelTitle.lineBreakMode = .byTruncatingTail
         labelTitle.numberOfLines = 2
         
         //let labelDateRange : UILabel = UILabel(frame: CGRectMake(0.0,  35.0, 377.0, 18.0))
         
-        let labelDateRange : UILabel = UILabel(frame: CGRectMake(0.0,  35.0, 339.0, 18.0))
+        let labelDateRange : UILabel = UILabel(frame: CGRect(x: 0.0,  y: 35.0, width: 339.0, height: 18.0))
 
-        let labelPorcentaje: UILabel = UILabel(frame: CGRectMake(0.0, 53.0,  78.0, 20.0))
+        let labelPorcentaje: UILabel = UILabel(frame: CGRect(x: 0.0, y: 53.0,  width: 78.0, height: 20.0))
         
-        let labelPresupuesto: UILabel = UILabel(frame: CGRectMake(  0.0, 68.0, 100.0, 25.0))
-        let labelIngresos   : UILabel = UILabel(frame: CGRectMake(112.0, 68.0, 100.0, 25.0))
-        let labelEgresos    : UILabel = UILabel(frame: CGRectMake(237.0, 68.0, 100.0, 25.0))
+        let labelPresupuesto: UILabel = UILabel(frame: CGRect(x: 0.0, y: 68.0, width: 100.0, height: 25.0))
+        let labelIngresos   : UILabel = UILabel(frame: CGRect(x: 112.0, y: 68.0, width: 100.0, height: 25.0))
+        let labelEgresos    : UILabel = UILabel(frame: CGRect(x: 237.0, y: 68.0, width: 100.0, height: 25.0))
         
-        let douPresupuesto = cpresupuesto.valueForKey(smModelo.smPresupuesto.colValor) as! Double
+        let douPresupuesto = cpresupuesto.value(forKey: smModelo.smPresupuesto.colValor) as! Double
         
-        let douIngresos = cpresupuesto.valueForKey(smModelo.smPresupuesto.colIngresos) as! Double
+        let douIngresos = cpresupuesto.value(forKey: smModelo.smPresupuesto.colIngresos) as! Double
         
-        let douEjecutado = cpresupuesto.valueForKey(smModelo.smPresupuesto.colEjecutado) as! Double
+        let douEjecutado = cpresupuesto.value(forKey: smModelo.smPresupuesto.colEjecutado) as! Double
         
-        let douUmbral = cpresupuesto.valueForKey(smModelo.smPresupuesto.colUmbral) as! Double
+        let douUmbral = cpresupuesto.value(forKey: smModelo.smPresupuesto.colUmbral) as! Double
         
         let porcentaje = (douEjecutado - douIngresos) / douPresupuesto * 100
         
-        let strTitulo      = cpresupuesto.valueForKey(smModelo.smPresupuesto.colDescripcion) as! String
+        let strTitulo      = cpresupuesto.value(forKey: smModelo.smPresupuesto.colDescripcion) as! String
         
-        let strDateRange   = "\(dateFormatter.stringFromDate(cpresupuesto.fechaInicio!)) - \(dateFormatter.stringFromDate(cpresupuesto.fechaFinal!))"
-        let strPresupuesto = formatterMon.stringFromNumber(douPresupuesto)!
-        let strIngreso     = formatterMon.stringFromNumber(douIngresos)!
-        let strEjecutado   = formatterMon.stringFromNumber(douEjecutado)!
+        let strDateRange   = "\(dateFormatter.string(from: cpresupuesto.fechaInicio! as Date)) - \(dateFormatter.string(from: cpresupuesto.fechaFinal! as Date))"
+        let strPresupuesto = formatterMon.string(from: NSNumber.init(value: douPresupuesto))!
+        let strIngreso     = formatterMon.string(from: NSNumber.init(value: douIngresos))!
+        let strEjecutado   = formatterMon.string(from: NSNumber.init(value: douEjecutado))!
         
         let fontName =  "Verdana-Bold"
         let fontNameNumeric = "Verdana"
@@ -413,42 +413,42 @@ class TVCPresupuestos: UITableViewController {
         
         labelTitle.text = "  " + strTitulo
         labelTitle.font = UIFont(name: fontName, size: 13)
-        labelTitle.textColor = UIColor.blackColor()
+        labelTitle.textColor = UIColor.black
         labelTitle.tag = cindexPath.row
-        labelTitle.backgroundColor = UIColor.grayColor()
+        labelTitle.backgroundColor = UIColor.gray
         cell.contentView.addSubview(labelTitle)
         
         labelDateRange.text = "  " + strDateRange
         labelDateRange.font = UIFont(name: fontNameNumeric, size: 11)
-        labelDateRange.textColor = UIColor.blackColor()
+        labelDateRange.textColor = UIColor.black
         labelDateRange.tag = cindexPath.row
-        labelDateRange.backgroundColor = UIColor.grayColor()
+        labelDateRange.backgroundColor = UIColor.gray
         cell.contentView.addSubview(labelDateRange)
         
         
-        labelPorcentaje.text = "  At " + formatterFlt.stringFromNumber(porcentaje)! + "%"
+        labelPorcentaje.text = "  At " + formatterFlt.string(from: NSNumber.init(value: porcentaje))! + "%"
         labelPorcentaje.font =  UIFont(name: fontName, size: 12)
-        labelPorcentaje.textColor = UIColor.blueColor()
+        labelPorcentaje.textColor = UIColor.blue
         labelPorcentaje.tag = cindexPath.row
-        labelPorcentaje.textAlignment = .Left
+        labelPorcentaje.textAlignment = .left
         labelPorcentaje.frame.size.height = 15
 
         let backgroundView = UIView()
         if douUmbral > 0 {
             if porcentaje >= douUmbral && porcentaje < 100 {
                 labelPorcentaje.backgroundColor = UIColor.customLightYellowColor()
-                labelPorcentaje.textColor = UIColor.blackColor()
-                labelPorcentaje.font = UIFont.boldSystemFontOfSize(12)
+                labelPorcentaje.textColor = UIColor.black
+                labelPorcentaje.font = UIFont.boldSystemFont(ofSize: 12)
                 backgroundView.backgroundColor = UIColor.customLightYellowColor()
             } else if porcentaje > 100 {
                 labelPorcentaje.backgroundColor = UIColor.customLightRedColor()
-                labelPorcentaje.textColor = UIColor.blackColor()
-                labelPorcentaje.font = UIFont.boldSystemFontOfSize(12)
+                labelPorcentaje.textColor = UIColor.black
+                labelPorcentaje.font = UIFont.boldSystemFont(ofSize: 12)
                 backgroundView.backgroundColor = UIColor.customLightRedColor()
             } else {
                 labelPorcentaje.backgroundColor = UIColor.customLightGreenColor()
-                labelPorcentaje.textColor = UIColor.blackColor()
-                labelPorcentaje.font = UIFont.boldSystemFontOfSize(12)
+                labelPorcentaje.textColor = UIColor.black
+                labelPorcentaje.font = UIFont.boldSystemFont(ofSize: 12)
                 backgroundView.backgroundColor = UIColor.customLightGreenColor()
             }
         }
@@ -457,25 +457,25 @@ class TVCPresupuestos: UITableViewController {
 
         labelPresupuesto.text = strPresupuesto
         labelPresupuesto.font =  UIFont(name: fontNameNumeric, size: 11)
-        labelPresupuesto.textColor = UIColor.blackColor()
+        labelPresupuesto.textColor = UIColor.black
         labelPresupuesto.tag = cindexPath.row
-        labelPresupuesto.textAlignment = .Right
+        labelPresupuesto.textAlignment = .right
         //labelPresupuesto.backgroundColor = UIColor.customBlueColor()
         cell.contentView.addSubview(labelPresupuesto)
         
         labelIngresos.text = String(format: "\(strIngreso)")
         labelIngresos.font = UIFont(name: fontNameNumeric, size: 11)
-        labelIngresos.textColor = UIColor.blueColor()
+        labelIngresos.textColor = UIColor.blue
         labelIngresos.tag = cindexPath.row
-        labelIngresos.textAlignment = .Right
+        labelIngresos.textAlignment = .right
         //labelIngresos.backgroundColor = UIColor.customLightYellowColor()
         cell.contentView.addSubview(labelIngresos)
         
         labelEgresos.text = String(format: "\(strEjecutado)")
         labelEgresos.font = UIFont(name: fontNameNumeric, size: 11)
-        labelEgresos.textColor = UIColor.redColor()
+        labelEgresos.textColor = UIColor.red
         labelEgresos.tag = cindexPath.row
-        labelEgresos.textAlignment = .Right
+        labelEgresos.textAlignment = .right
         cell.contentView.addSubview(labelEgresos)
         
         cell.accessoryType = caccessoryType
@@ -490,7 +490,7 @@ class TVCPresupuestos: UITableViewController {
  
     */
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        
         //let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
         // Configure the cell...
@@ -500,13 +500,13 @@ class TVCPresupuestos: UITableViewController {
             self.presupuesto = self.presupuestos[indexPath.row] as? Presupuesto
             
             if self.presupuesto != nil {
-                cell = self.customTableView(tableView, cindexPath: indexPath, cpresupuesto: self.presupuesto!, caccessoryType: .DisclosureIndicator)
+                cell = self.customTableView(tableView, cindexPath: indexPath, cpresupuesto: self.presupuesto!, caccessoryType: .disclosureIndicator)
             } else {
-                cell = tableView.dequeueReusableCellWithIdentifier("CustomTableViewCell", forIndexPath: indexPath)
+                cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath)
             }
             
         } else {
-            cell = tableView.dequeueReusableCellWithIdentifier("CustomTableViewCell", forIndexPath: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath)
                     
         }
         return cell!
@@ -518,17 +518,17 @@ class TVCPresupuestos: UITableViewController {
     }
     */
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if tableView.editing {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
             //showCustomWarningAlert("Has seleccionado la row: \(indexPath.row) en modo de edición", toFocus: nil)
             
             self.intSelectedIndex = indexPath.row
-            self.toolbarItems?.first?.enabled = true
+            self.toolbarItems?.first?.isEnabled = true
 
-            self.performSegueWithIdentifier("segueNewPresupuesto", sender: self)
+            self.performSegue(withIdentifier: "segueNewPresupuesto", sender: self)
         } else {
             self.intSelectedIndex = indexPath.row
-            self.performSegueWithIdentifier("segueDetalle", sender: self)
+            self.performSegue(withIdentifier: "segueDetalle", sender: self)
         }
         
         indexSelected = indexPath
@@ -536,11 +536,11 @@ class TVCPresupuestos: UITableViewController {
     
 
     // MARK: - Alerta personalizada
-    func showCustomWarningAlert(strMensaje: String, toFocus: UITextField?) {
+    func showCustomWarningAlert(_ strMensaje: String, toFocus: UITextField?) {
         let alertController = UIAlertController(title: strAppTitle, message:
-            strMensaje, preferredStyle: UIAlertControllerStyle.Alert)
+            strMensaje, preferredStyle: UIAlertControllerStyle.alert)
         
-        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel,handler: {_ in
+        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.cancel,handler: {_ in
             
                 if toFocus != nil {
                     toFocus!.becomeFirstResponder()
@@ -550,7 +550,7 @@ class TVCPresupuestos: UITableViewController {
         
         alertController.addAction(action)
         
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
         
     }
 
@@ -564,7 +564,7 @@ class TVCPresupuestos: UITableViewController {
     }
     */
     
-    override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         // Estilo checkbox - No repinta el background de los label
         //return UITableViewCellEditingStyle(rawValue: 3)!
         // Estilo sin imagen - permite eliminación
@@ -578,14 +578,14 @@ class TVCPresupuestos: UITableViewController {
 
 
     // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
 
     // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             // Delete the row from the data source
             
             #if LITE_VERSION
@@ -601,15 +601,15 @@ class TVCPresupuestos: UITableViewController {
                     if boolPreservar {
                         self.presupuesto?.setValue(false, forKey: smModelo.smPresupuesto.colActivo)
                     } else {
-                        self.moc.deleteObject(self.presupuestos[indexPath.row] as! NSManagedObject)
+                        self.moc.delete(self.presupuestos[indexPath.row] as! NSManagedObject)
                     }
                     
-                    self.presupuestos.removeAtIndex(indexPath.row)
+                    self.presupuestos.remove(at: indexPath.row)
                     
                     do {
                         try self.moc.save()
                         
-                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                        tableView.deleteRows(at: [indexPath], with: .fade)
                     } catch {
                         let deleteError = error as NSError
                         print(deleteError)
@@ -618,7 +618,7 @@ class TVCPresupuestos: UITableViewController {
             #endif
             
             
-        } else if editingStyle == .Insert {
+        } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
             
         }    
@@ -640,25 +640,25 @@ class TVCPresupuestos: UITableViewController {
     */
     
     // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
         if segue.identifier == "segueNewPresupuesto" {
 
-            let vBudget = segue.destinationViewController as! TVCPresupuesto
+            let vBudget = segue.destination as! TVCPresupuesto
 
             if self.intSelectedIndex != -1 {
                 if self.presupuestos.count > 0 {
                     
                     self.presupuesto = self.presupuestos[self.intSelectedIndex] as? Presupuesto
                     
-                    preferencias.setObject(self.presupuesto?.descripcion, forKey: dflPresupuestoLookingFor)
+                    preferencias.set(self.presupuesto?.descripcion, forKey: dflPresupuestoLookingFor)
                 }
                 vBudget.presupuesto = self.presupuesto
                 self.intSelectedIndex = -1
             } else {
-                preferencias.setObject(nil, forKey: dflPresupuestoLookingFor)
+                preferencias.set(nil, forKey: dflPresupuestoLookingFor)
                 vBudget.presupuesto = nil
             }
             
@@ -666,19 +666,19 @@ class TVCPresupuestos: UITableViewController {
                 
         } else if segue.identifier == "segueDetalle" {
             
-            let vDetail = segue.destinationViewController as! TVCPresupuestoDetalle
+            let vDetail = segue.destination as! TVCPresupuestoDetalle
             
             if self.intSelectedIndex != -1 {
                 if self.presupuestos.count > 0 {
                     
                     self.presupuesto = self.presupuestos[self.intSelectedIndex] as? Presupuesto
                     
-                    preferencias.setObject(self.presupuesto?.descripcion, forKey: dflPresupuestoLookingFor)
+                    preferencias.set(self.presupuesto?.descripcion, forKey: dflPresupuestoLookingFor)
                 }
                 vDetail.presupuesto = self.presupuesto
                 self.intSelectedIndex = -1
             } else {
-                preferencias.setObject(nil, forKey: dflPresupuestoLookingFor)
+                preferencias.set(nil, forKey: dflPresupuestoLookingFor)
                 vDetail.presupuesto = nil
             }
 

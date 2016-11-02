@@ -17,8 +17,8 @@ extension Presupuesto {
     @NSManaged var preservar: NSNumber?
     @NSManaged var descripcion: String?
     @NSManaged var ejecutado: NSNumber?
-    @NSManaged var fechaFinal: NSDate?
-    @NSManaged var fechaInicio: NSDate?
+    @NSManaged var fechaFinal: Date?
+    @NSManaged var fechaInicio: Date?
     @NSManaged var ingresos: NSNumber?
     @NSManaged var umbral: NSNumber?
     @NSManaged var valor: NSNumber?

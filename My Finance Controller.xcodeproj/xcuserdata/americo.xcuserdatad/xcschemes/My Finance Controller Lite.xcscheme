@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0730"
+   LastUpgradeVersion = "0810"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1E6540481D5D1B8400977D61"
+               BlueprintIdentifier = "1E3C48761D6411FB00527508"
                BuildableName = "My Finance Controller Lite.app"
                BlueprintName = "My Finance Controller Lite"
                ReferencedContainer = "container:My Finance Controller.xcodeproj">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1E6540481D5D1B8400977D61"
+            BlueprintIdentifier = "1E3C48761D6411FB00527508"
             BuildableName = "My Finance Controller Lite.app"
             BlueprintName = "My Finance Controller Lite"
             ReferencedContainer = "container:My Finance Controller.xcodeproj">
@@ -55,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1E6540481D5D1B8400977D61"
+            BlueprintIdentifier = "1E3C48761D6411FB00527508"
             BuildableName = "My Finance Controller Lite.app"
             BlueprintName = "My Finance Controller Lite"
             ReferencedContainer = "container:My Finance Controller.xcodeproj">
@@ -74,7 +74,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1E6540481D5D1B8400977D61"
+            BlueprintIdentifier = "1E3C48761D6411FB00527508"
             BuildableName = "My Finance Controller Lite.app"
             BlueprintName = "My Finance Controller Lite"
             ReferencedContainer = "container:My Finance Controller.xcodeproj">

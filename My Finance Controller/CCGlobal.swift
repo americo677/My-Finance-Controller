@@ -9,7 +9,7 @@
 import Foundation
 
 // Custom Class for Global Values
-public class CCGlobal {
+open class CCGlobal {
     let MAX_EXECUTIONS_FOR_LITE_VERSION = 30
     let MAX_BUDGETS_LITE_VERSION = 4
     let MAX_SECTIONS_FOR_BUDGETS_LITE_VERSION = 3

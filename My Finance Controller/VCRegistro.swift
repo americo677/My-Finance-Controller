@@ -47,11 +47,11 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     
     let dtpFecha: UIDatePicker = UIDatePicker()
     
-    let dtFormatter: NSDateFormatter = NSDateFormatter()
+    let dtFormatter: DateFormatter = DateFormatter()
 
-    let formatterMon : NSNumberFormatter = NSNumberFormatter()
+    let formatterMon : NumberFormatter = NumberFormatter()
     
-    let formatterFlt : NSNumberFormatter = NSNumberFormatter()
+    let formatterFlt : NumberFormatter = NumberFormatter()
 
     var intSeccionSeleccionada: Int?
 
@@ -124,7 +124,7 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         self.tfTipoRegistro.resignFirstResponder()
     }
     
-    func handleDatePicker(sender: UITextField) {
+    func handleDatePicker(_ sender: UITextField) {
         let picker: UIDatePicker = self.tfFechaRegistro.inputView as! UIDatePicker
         
         var isGreaterIni = false
@@ -136,36 +136,36 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         
         if self.presupuesto != nil {
             
-            let calendario = NSCalendar.currentCalendar()
+            let calendario = Calendar.current
             
             let iniDate = self.presupuesto?.fechaInicio
             let finDate = self.presupuesto?.fechaFinal
             
-            calendario.compareDate(picker.date, toDate: iniDate!, toUnitGranularity: .Day)
+            (calendario as NSCalendar).compare(picker.date, to: iniDate! as Date, toUnitGranularity: .day)
             
-            if calendario.compareDate(picker.date, toDate: iniDate!, toUnitGranularity: .Day) == NSComparisonResult.OrderedDescending {
+            if (calendario as NSCalendar).compare(picker.date, to: iniDate! as Date, toUnitGranularity: .day) == ComparisonResult.orderedDescending {
                 isGreaterIni = true
-            } else if calendario.compareDate(picker.date, toDate: iniDate!, toUnitGranularity: .Day) == NSComparisonResult.OrderedSame {
+            } else if (calendario as NSCalendar).compare(picker.date, to: iniDate! as Date, toUnitGranularity: .day) == ComparisonResult.orderedSame {
                 isEqualToIni = true
-            } else if calendario.compareDate(picker.date, toDate: iniDate!, toUnitGranularity: .Day) == NSComparisonResult.OrderedAscending {
+            } else if (calendario as NSCalendar).compare(picker.date, to: iniDate! as Date, toUnitGranularity: .day) == ComparisonResult.orderedAscending {
                 isLessIni = true
             }
                 
-            if calendario.compareDate(picker.date, toDate: finDate!, toUnitGranularity: .Day) == NSComparisonResult.OrderedDescending {
+            if (calendario as NSCalendar).compare(picker.date, to: finDate! as Date, toUnitGranularity: .day) == ComparisonResult.orderedDescending {
                 isGreaterFin = true
-            } else if calendario.compareDate(picker.date, toDate: finDate!, toUnitGranularity: .Day) == NSComparisonResult.OrderedSame {
+            } else if (calendario as NSCalendar).compare(picker.date, to: finDate! as Date, toUnitGranularity: .day) == ComparisonResult.orderedSame {
                 isEqualToFin = true
-            } else if calendario.compareDate(picker.date, toDate: finDate!, toUnitGranularity: .Day) == NSComparisonResult.OrderedAscending {
+            } else if (calendario as NSCalendar).compare(picker.date, to: finDate! as Date, toUnitGranularity: .day) == ComparisonResult.orderedAscending {
                 isLessFin = true
             }
             
             if isLessIni || isGreaterFin {
-                showCustomWarningAlert("The date is out of range for the budget since \(dtFormatter.stringFromDate(iniDate!)) to \(dtFormatter.stringFromDate(finDate!)).", toFocus: tfFechaRegistro)
+                showCustomWarningAlert("The date is out of range for the budget since \(dtFormatter.string(from: iniDate! as Date)) to \(dtFormatter.string(from: finDate! as Date)).", toFocus: tfFechaRegistro)
             } else if (isGreaterIni || isEqualToIni) && (isLessFin || isEqualToFin) {
-                tfFechaRegistro.text = dtFormatter.stringFromDate(picker.date)
+                tfFechaRegistro.text = dtFormatter.string(from: picker.date)
                 
             } else {
-                showCustomWarningAlert("The date is out of range for the budget since \(dtFormatter.stringFromDate(iniDate!)) to \(dtFormatter.stringFromDate(finDate!)).", toFocus: tfFechaRegistro)
+                showCustomWarningAlert("The date is out of range for the budget since \(dtFormatter.string(from: iniDate! as Date)) to \(dtFormatter.string(from: finDate! as Date)).", toFocus: tfFechaRegistro)
             }
         }
         tfFechaRegistro.resignFirstResponder()
@@ -175,8 +175,8 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         // Preparación del Picker de Sección o Categoría
         var numberOfRows: Int = 0
         
-        self.pckrSeccion = UIPickerView(frame: CGRectMake(0, 200, view.frame.width, 250))
-        self.pckrSeccion.backgroundColor = UIColor.grayColor()
+        self.pckrSeccion = UIPickerView(frame: CGRect(x: 0, y: 200, width: view.frame.width, height: 250))
+        self.pckrSeccion.backgroundColor = UIColor.gray
         self.pckrSeccion.tag = 0
         
         self.pckrSeccion.showsSelectionIndicator = true
@@ -184,19 +184,19 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         self.pckrSeccion.dataSource = self
         
         let tbSeccion         = UIToolbar()
-        tbSeccion.barStyle    = UIBarStyle.Default
-        tbSeccion.translucent = true
+        tbSeccion.barStyle    = UIBarStyle.default
+        tbSeccion.isTranslucent = true
         
         //toolBar.tintColor = UIColor.whiteColor()
         //UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
         tbSeccion.sizeToFit()
         
-        let btnDoneSec = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(self.donePickerSec))
-        let btnSpaceSec = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-        let btnCancelSec = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(self.cancelPickerSec))
+        let btnDoneSec = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.donePickerSec))
+        let btnSpaceSec = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let btnCancelSec = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.cancelPickerSec))
         
         tbSeccion.setItems([btnCancelSec, btnSpaceSec, btnDoneSec], animated: false)
-        tbSeccion.userInteractionEnabled = true
+        tbSeccion.isUserInteractionEnabled = true
         
         self.tfSeccion.inputView = self.pckrSeccion
         self.tfSeccion.inputAccessoryView = tbSeccion
@@ -208,14 +208,14 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         
         //self.tfSeccion.text = self.arrSeccion![defaultRowIndex].descripcion
         self.intSeccionSeleccionada = defaultRowIndex
-        if !self.tfSeccion.hasText() {
+        if !self.tfSeccion.hasText {
             self.tfSeccion.text = self.arrSeccion![defaultRowIndex].descripcion
             self.seccion = self.arrSeccion![defaultRowIndex] as PresupuestoSeccion
         }
         
         // Preparación del Picker de Tipo de Registro
-        self.pckrTipoRegistro     = UIPickerView(frame: CGRectMake(0, 200, view.frame.width, 250))
-        self.pckrTipoRegistro.backgroundColor = .grayColor()
+        self.pckrTipoRegistro     = UIPickerView(frame: CGRect(x: 0, y: 200, width: view.frame.width, height: 250))
+        self.pckrTipoRegistro.backgroundColor = .gray
         self.pckrTipoRegistro.tag = 1
         
         self.pckrTipoRegistro.showsSelectionIndicator = true
@@ -223,31 +223,31 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         self.pckrTipoRegistro.dataSource = self
         
         let tbTipoRegistro         = UIToolbar()
-        tbTipoRegistro.barStyle    = UIBarStyle.Default
-        tbTipoRegistro.translucent = true
+        tbTipoRegistro.barStyle    = UIBarStyle.default
+        tbTipoRegistro.isTranslucent = true
         
         //toolBar.tintColor = UIColor.whiteColor()
         //UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
         tbTipoRegistro.sizeToFit()
         
-        let btnDoneTR = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(VCRegistro.donePickerTR))
-        let btnSpaceTR = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-        let btnCancelTR = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(VCRegistro.donePickerTR))
+        let btnDoneTR = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(VCRegistro.donePickerTR))
+        let btnSpaceTR = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let btnCancelTR = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(VCRegistro.donePickerTR))
         
         tbTipoRegistro.setItems([btnCancelTR, btnSpaceTR, btnDoneTR], animated: false)
-        tbTipoRegistro.userInteractionEnabled = true
+        tbTipoRegistro.isUserInteractionEnabled = true
         
         self.tfTipoRegistro.inputView = self.pckrTipoRegistro
         self.tfTipoRegistro.inputAccessoryView = tbTipoRegistro
 
         // colocar el valor por default en el picker de un solo componente
-        numberOfRows = self.pckrTipoRegistro.numberOfRowsInComponent(0)
+        numberOfRows = self.pckrTipoRegistro.numberOfRows(inComponent: 0)
         if numberOfRows > 0 {
             self.pckrTipoRegistro.selectRow(defaultRowIndex, inComponent: 0, animated: true)
         }
         
         self.intTipoRegistroSeleccionado = defaultRowIndex
-        if !self.tfTipoRegistro.hasText() {
+        if !self.tfTipoRegistro.hasText {
             self.tfTipoRegistro.text = self.arrTipoRegistro[defaultRowIndex]
         }
         
@@ -258,36 +258,36 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     }
     
     func initDatePickers() {
-        dtpFecha.date = NSDate()
-        dtpFecha.datePickerMode = UIDatePickerMode.Date
+        dtpFecha.date = Date()
+        dtpFecha.datePickerMode = UIDatePickerMode.date
         //dtpFecha.addTarget(self, action: #selector(self.handleDatePicker(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         self.tfFechaRegistro.inputView = dtpFecha
         
         let tbFecha         = UIToolbar()
-        tbFecha.barStyle    = UIBarStyle.Default
-        tbFecha.translucent = true
+        tbFecha.barStyle    = UIBarStyle.default
+        tbFecha.isTranslucent = true
         
         //toolBar.tintColor = UIColor.whiteColor()
         //UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
         tbFecha.sizeToFit()
         
-        let btnDoneF = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(self.handleDatePicker(_:)))
-        let btnSpaceF = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
-        let btnCancelF = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(self.handleDatePicker(_:)))
+        let btnDoneF = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.handleDatePicker(_:)))
+        let btnSpaceF = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let btnCancelF = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.handleDatePicker(_:)))
         
         tbFecha.setItems([btnCancelF, btnSpaceF, btnDoneF], animated: false)
-        tbFecha.userInteractionEnabled = true
+        tbFecha.isUserInteractionEnabled = true
         
         self.tfFechaRegistro.inputAccessoryView = tbFecha
     }
     
     func initFormatters() {
         self.dtFormatter.dateFormat = "dd/MM/yyyy"
-        self.formatterMon.numberStyle = .CurrencyStyle
+        self.formatterMon.numberStyle = .currency
         self.formatterMon.maximumFractionDigits = 2
         
-        self.formatterFlt.numberStyle = .NoStyle
+        self.formatterFlt.numberStyle = .none
         self.formatterFlt.maximumFractionDigits = 2
     }
     
@@ -309,15 +309,15 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     func loadReciboParaEdicion() {
         if self.recibo != nil {
             self.tfSeccion.text = self.seccion?.descripcion
-            self.tfSeccion.enabled = false
-            self.tfSeccion.backgroundColor = UIColor.lightGrayColor()
-            self.tfReciboDescripcion.text = self.recibo!.valueForKey(smModelo.smRecibo.colDescripcion) as! String!
-            self.tfFechaRegistro.text     = dtFormatter.stringFromDate(self.recibo!.valueForKey(smModelo.smRecibo.colFecha) as! NSDate!)
-            self.tfTipoRegistro.text      = self.arrTipoRegistro[self.recibo!.valueForKey(smModelo.smRecibo.colTipo) as! Int]
-            self.tfTipoRegistro.enabled = false
-            self.tfTipoRegistro.backgroundColor = UIColor.lightGrayColor()
-            self.intTipoRegistroSeleccionado = self.recibo!.valueForKey(smModelo.smRecibo.colTipo) as? Int
-            self.tfReciboMonto.text       = formatterMon.stringFromNumber(self.recibo!.valueForKey(smModelo.smRecibo.colValor) as! Double)
+            self.tfSeccion.isEnabled = false
+            self.tfSeccion.backgroundColor = UIColor.lightGray
+            self.tfReciboDescripcion.text = self.recibo!.value(forKey: smModelo.smRecibo.colDescripcion) as! String!
+            self.tfFechaRegistro.text     = dtFormatter.string(from: self.recibo!.value(forKey: smModelo.smRecibo.colFecha) as! Date!)
+            self.tfTipoRegistro.text      = self.arrTipoRegistro[self.recibo!.value(forKey: smModelo.smRecibo.colTipo) as! Int]
+            self.tfTipoRegistro.isEnabled = false
+            self.tfTipoRegistro.backgroundColor = UIColor.lightGray
+            self.intTipoRegistroSeleccionado = self.recibo!.value(forKey: smModelo.smRecibo.colTipo) as? Int
+            self.tfReciboMonto.text       = formatterMon.string(from: NSNumber.init(value: self.recibo!.value(forKey: smModelo.smRecibo.colValor) as! Double))
         }
     }
 
@@ -325,11 +325,11 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         super.viewDidLoad()
         
         let sublayer = CALayer.init()
-        sublayer.backgroundColor = UIColor.customLightGrayColor().CGColor
-        sublayer.shadowOffset = CGSizeMake(0, 3)
+        sublayer.backgroundColor = UIColor.customLightGrayColor().cgColor
+        sublayer.shadowOffset = CGSize(width: 0, height: 3)
         sublayer.shadowRadius = 5.0
         sublayer.shadowOpacity = 0.8;
-        sublayer.frame = CGRectMake(0, 0, 420, 4200)
+        sublayer.frame = CGRect(x: 0, y: 0, width: 420, height: 4200)
         self.view.layer.addSublayer(sublayer)
         
         self.initFormatters()
@@ -343,7 +343,7 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         self.view.addGestureRecognizer(tap)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         #if LITE_VERSION
             self.intTotalRecibos = 0
             if self.presupuesto != nil {
@@ -363,23 +363,23 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         #endif
         
         #if FULL_VERSION
-            self.bbtnSave.enabled = true
+            self.bbtnSave.isEnabled = true
         #endif
 
     }
     
     // MARK: - Validación de formato numérico
-    func validarValorNumericoMon(txtValor: String?) -> Bool {
+    func validarValorNumericoMon(_ txtValor: String?) -> Bool {
         
         var boolResultado: Bool = true
         var douValor: Double?
         if !(txtValor?.isEmpty)! {
-            douValor = formatterFlt.numberFromString(txtValor!)?.doubleValue
+            douValor = formatterFlt.number(from: txtValor!)?.doubleValue
             
-            if formatterFlt.numberFromString(txtValor!)?.doubleValue == nil {
-                douValor = formatterMon.numberFromString(txtValor!)?.doubleValue
+            if formatterFlt.number(from: txtValor!)?.doubleValue == nil {
+                douValor = formatterMon.number(from: txtValor!)?.doubleValue
             } else {
-                douValor = formatterFlt.numberFromString(txtValor!)?.doubleValue
+                douValor = formatterFlt.number(from: txtValor!)?.doubleValue
             }
 
             if douValor == nil {
@@ -394,12 +394,12 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     }
     
     // MARK: - Alerta personalizada
-    func showCustomWarningAlert(strMensaje: String, toFocus: UITextField?) {
+    func showCustomWarningAlert(_ strMensaje: String, toFocus: UITextField?) {
         
         let alertController = UIAlertController(title: strAppTitle, message:
-            strMensaje, preferredStyle: UIAlertControllerStyle.Alert)
+            strMensaje, preferredStyle: UIAlertControllerStyle.alert)
         
-        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel,handler: {_ in
+        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.cancel,handler: {_ in
             if toFocus != nil {
                 toFocus!.becomeFirstResponder()
             }
@@ -407,40 +407,40 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         
         alertController.addAction(action)
         
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
         
     }
 
-    @IBAction func tfReciboMontoOnEditingDidEnd(sender: UITextField) {
+    @IBAction func tfReciboMontoOnEditingDidEnd(_ sender: UITextField) {
         var esValido: Bool = true
-        if sender.hasText() {
+        if sender.hasText {
             esValido = validarValorNumericoMon(sender.text)
             if esValido == false {
                 showCustomWarningAlert("Please, check out the mount of money.  It is not valid!.", toFocus: sender)
             } else {
                 //print("Log: \(sender.text!) es un número válido!")
                 var monto: Double?
-                if formatterFlt.numberFromString(sender.text!)?.doubleValue == nil {
-                    monto = formatterMon.numberFromString(sender.text!)?.doubleValue
+                if formatterFlt.number(from: sender.text!)?.doubleValue == nil {
+                    monto = formatterMon.number(from: sender.text!)?.doubleValue
                 } else {
-                    monto = formatterFlt.numberFromString(sender.text!)?.doubleValue
+                    monto = formatterFlt.number(from: sender.text!)?.doubleValue
                 }
-                sender.text = formatterMon.stringFromNumber(monto!)
+                sender.text = formatterMon.string(from: NSNumber.init(value: monto!))
             }
         }
     }
     
     // MARK: - Procedimiento de preparación y validación de datos ingresados para guardado
-    func prepararRecibo(inout isReciboReady isComplete: Bool) {
+    func prepararRecibo(isReciboReady isComplete: inout Bool) {
         isComplete = true
         if self.recibo == nil {
-            let recibo = NSEntityDescription.insertNewObjectForEntityForName(self.smModelo.smRecibo.entityName, inManagedObjectContext: self.moc) as? Recibo
+            let recibo = NSEntityDescription.insertNewObject(forEntityName: self.smModelo.smRecibo.entityName, into: self.moc) as? Recibo
             
             if self.seccion != nil {
                 recibo!.setValue(self.seccion, forKey: smModelo.smRecibo.colSeccion)
             }
             
-            if self.tfReciboDescripcion.hasText() {
+            if self.tfReciboDescripcion.hasText {
                 //self.recibo?.descripcion = self.tfReciboDescripcion.text
                 
                 recibo!.setValue(self.tfReciboDescripcion.text, forKey: smModelo.smRecibo.colDescripcion)
@@ -449,16 +449,16 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
                 showCustomWarningAlert("You must enter the description for the receipt.", toFocus: self.tfReciboDescripcion)
             }
             
-            if self.tfFechaRegistro.hasText() {
+            if self.tfFechaRegistro.hasText {
                 //self.recibo?.fecha =  dtFormatter.dateFromString(self.tfFechaRegistro.text!)
                 
-                recibo!.setValue(dtFormatter.dateFromString(self.tfFechaRegistro.text!), forKey: smModelo.smRecibo.colFecha)
+                recibo!.setValue(dtFormatter.date(from: self.tfFechaRegistro.text!), forKey: smModelo.smRecibo.colFecha)
             } else {
                 isComplete = false
                 showCustomWarningAlert("You must enter the date for the receipt.", toFocus: self.tfFechaRegistro)
             }
             
-            if self.tfTipoRegistro.hasText() {
+            if self.tfTipoRegistro.hasText {
                 if self.intTipoRegistroSeleccionado != nil {
                     //self.recibo?.tipo = self.intTipoRegistroSeleccionado
                     recibo!.setValue(self.intTipoRegistroSeleccionado, forKey: smModelo.smRecibo.colTipo)
@@ -471,18 +471,18 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
                 showCustomWarningAlert("You must enter the kind for the receipt.", toFocus: self.tfTipoRegistro)
             }
             
-            if self.tfReciboMonto.hasText() == false {
+            if self.tfReciboMonto.hasText == false {
                 isComplete = false
                 showCustomWarningAlert("You must enter the mount of money for the receipt.", toFocus: self.tfReciboMonto)
             } else {
-                let monto: Double = (formatterMon.numberFromString(self.tfReciboMonto.text!)?.doubleValue)!
+                let monto: Double = (formatterMon.number(from: self.tfReciboMonto.text!)?.doubleValue)!
                 
                 recibo!.setValue(monto, forKey: smModelo.smRecibo.colValor)
                 
                 if eTipoRegistro.expenditure.hashValue == self.intTipoRegistroSeleccionado {
                     print ("On Add Receipt: \(self.seccion!)")
-                    var egreso  = (self.seccion?.valueForKey(smModelo.smPresupuestoSeccion.colTotalEgresos) as? Double)!
-                    var egresos = (self.presupuesto?.valueForKey(smModelo.smPresupuesto.colEjecutado) as? Double)!
+                    var egreso  = (self.seccion?.value(forKey: smModelo.smPresupuestoSeccion.colTotalEgresos) as? Double)!
+                    var egresos = (self.presupuesto?.value(forKey: smModelo.smPresupuesto.colEjecutado) as? Double)!
                     
                     egreso += monto
                     egresos += monto
@@ -490,8 +490,8 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
                     self.seccion?.setValue(egreso, forKey: smModelo.smPresupuestoSeccion.colTotalEgresos)
                     self.presupuesto?.setValue(egresos, forKey: smModelo.smPresupuesto.colEjecutado)
                 } else if eTipoRegistro.income.hashValue == self.intTipoRegistroSeleccionado {
-                    var ingreso = (self.seccion?.valueForKey(smModelo.smPresupuestoSeccion.colTotalIngresos) as? Double)!
-                    var ingresos = (self.presupuesto?.valueForKey(smModelo.smPresupuesto.colIngresos) as? Double)!
+                    var ingreso = (self.seccion?.value(forKey: smModelo.smPresupuestoSeccion.colTotalIngresos) as? Double)!
+                    var ingresos = (self.presupuesto?.value(forKey: smModelo.smPresupuesto.colIngresos) as? Double)!
                     
                     ingreso += monto
                     ingresos += monto
@@ -501,34 +501,34 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
                 }
             }
             
-            let lpsRecibo = self.seccion?.mutableSetValueForKey(self.smModelo.smPresupuestoSeccion.colRecibos)
+            let lpsRecibo = self.seccion?.mutableSetValue(forKey: self.smModelo.smPresupuestoSeccion.colRecibos)
             
-            lpsRecibo!.addObject(recibo!)
+            lpsRecibo!.add(recibo!)
             
             self.seccion?.setValue(lpsRecibo!, forKey: smModelo.smPresupuestoSeccion.colRecibos)
             
-            let lpsSeccion = self.presupuesto?.mutableSetValueForKey(self.smModelo.smPresupuesto.colSecciones)
+            let lpsSeccion = self.presupuesto?.mutableSetValue(forKey: self.smModelo.smPresupuesto.colSecciones)
             
-            lpsSeccion?.addObject(self.seccion!)
+            lpsSeccion?.add(self.seccion!)
             
             self.presupuesto?.setValue(lpsSeccion!, forKey: self.smModelo.smPresupuesto.colSecciones)
             
         } else {
-            if self.tfReciboDescripcion.hasText() {
+            if self.tfReciboDescripcion.hasText {
                 self.recibo!.setValue(self.tfReciboDescripcion.text, forKey: smModelo.smRecibo.colDescripcion)
             } else {
                 isComplete = false
                 showCustomWarningAlert("You must enter the description for the receipt.", toFocus: self.tfReciboDescripcion)
             }
             
-            if self.tfFechaRegistro.hasText() {
-                self.recibo!.setValue(dtFormatter.dateFromString(self.tfFechaRegistro.text!), forKey: smModelo.smRecibo.colFecha)
+            if self.tfFechaRegistro.hasText {
+                self.recibo!.setValue(dtFormatter.date(from: self.tfFechaRegistro.text!), forKey: smModelo.smRecibo.colFecha)
             } else {
                 isComplete = false
                 showCustomWarningAlert("You must enter the date for the receipt.", toFocus: self.tfFechaRegistro)
             }
             
-            if self.tfTipoRegistro.hasText() {
+            if self.tfTipoRegistro.hasText {
                 if self.intTipoRegistroSeleccionado != nil {
                     //self.recibo?.tipo = self.intTipoRegistroSeleccionado
                     self.recibo!.setValue(self.intTipoRegistroSeleccionado, forKey: smModelo.smRecibo.colTipo)
@@ -541,19 +541,19 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
                 showCustomWarningAlert("You must enter the kind for the receipt.", toFocus: self.tfTipoRegistro)
             }
             
-            if self.tfReciboMonto.hasText() == false {
+            if self.tfReciboMonto.hasText == false {
                 isComplete = false
                 showCustomWarningAlert("You must enter the mount of money for the receipt.", toFocus: self.tfReciboMonto)
             } else {
                 let montoPrev: Double = (self.recibo?.valor as? Double)!
                 
-                let monto: Double = (formatterMon.numberFromString(self.tfReciboMonto.text!)?.doubleValue)!
+                let monto: Double = (formatterMon.number(from: self.tfReciboMonto.text!)?.doubleValue)!
                 
                 self.recibo!.setValue(monto, forKey: smModelo.smRecibo.colValor)
                 
                 if eTipoRegistro.expenditure.hashValue == self.intTipoRegistroSeleccionado {
-                    var egreso  = (self.seccion?.valueForKey(smModelo.smPresupuestoSeccion.colTotalEgresos) as? Double)!
-                    var egresos = (self.presupuesto?.valueForKey(smModelo.smPresupuesto.colEjecutado) as? Double)!
+                    var egreso  = (self.seccion?.value(forKey: smModelo.smPresupuestoSeccion.colTotalEgresos) as? Double)!
+                    var egresos = (self.presupuesto?.value(forKey: smModelo.smPresupuesto.colEjecutado) as? Double)!
                     
                     egreso += monto
                     egresos += monto
@@ -564,8 +564,8 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
                     self.seccion?.setValue(egreso, forKey: smModelo.smPresupuestoSeccion.colTotalEgresos)
                     self.presupuesto?.setValue(egresos, forKey: smModelo.smPresupuesto.colEjecutado)
                 } else if eTipoRegistro.income.hashValue == self.intTipoRegistroSeleccionado {
-                    var ingreso = (self.seccion?.valueForKey(smModelo.smPresupuestoSeccion.colTotalIngresos) as? Double)!
-                    var ingresos = (self.presupuesto?.valueForKey(smModelo.smPresupuesto.colIngresos) as? Double)!
+                    var ingreso = (self.seccion?.value(forKey: smModelo.smPresupuestoSeccion.colTotalIngresos) as? Double)!
+                    var ingresos = (self.presupuesto?.value(forKey: smModelo.smPresupuesto.colIngresos) as? Double)!
                     
                     ingreso += monto
                     ingresos += monto
@@ -598,7 +598,7 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     }
     
     // MARK: - Botón para guardar nuevos registros y cambios
-    @IBAction func btnSaveOnTouchInsideDown(sender: UIBarButtonItem) {
+    @IBAction func btnSaveOnTouchInsideDown(_ sender: UIBarButtonItem) {
         // código para guardar
         
         if self.intTotalRecibos < CCGlobal().MAX_RECEIPTS_FOR_BUDGETS_LITE_VERSION {
@@ -610,11 +610,11 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     }
     
     // MARK: - Funciones de los UIPickerViews
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1 //pickerData.count
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
         var intNumberOfRows: Int = 0
         
@@ -628,7 +628,7 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
         var strTitle: String = ""
         
@@ -642,7 +642,7 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         return strTitle
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView.tag == 0 {
             // Almacena la sección
             self.tfSeccion.text = self.arrSeccion![row].descripcion

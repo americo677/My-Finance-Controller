@@ -9,9 +9,34 @@
 import UIKit
 import CoreData
 
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
+
 class TVCCategoria: UITableViewController {
     
-    let preferencias = NSUserDefaults.standardUserDefaults()
+    let preferencias = UserDefaults.standard
     
     let dflPresupuestoLookingFor = "nameOfBudgetLookingFor"
 
@@ -43,27 +68,27 @@ class TVCCategoria: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
         let sublayer = CALayer.init()
-        sublayer.backgroundColor = UIColor.customLightGrayColor().CGColor
-        sublayer.shadowOffset = CGSizeMake(0, 3)
+        sublayer.backgroundColor = UIColor.customLightGrayColor().cgColor
+        sublayer.shadowOffset = CGSize(width: 0, height: 3)
         sublayer.shadowRadius = 5.0
         sublayer.shadowOpacity = 0.8;
-        sublayer.frame = CGRectMake(0, 0, 420, 4200)
+        sublayer.frame = CGRect(x: 0, y: 0, width: 420, height: 4200)
         self.view.layer.addSublayer(sublayer)
         
         loadSections()
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.preferencias.synchronize()
         
     }
     
     // MARK: - Alerta personalizada
-    func showCustomWarningAlert(strMensaje: String, toFocus: UITextField?) {
+    func showCustomWarningAlert(_ strMensaje: String, toFocus: UITextField?) {
         let alertController = UIAlertController(title: strAppTitle, message:
-            strMensaje, preferredStyle: UIAlertControllerStyle.Alert)
+            strMensaje, preferredStyle: UIAlertControllerStyle.alert)
         
-        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel,handler: {_ in
+        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.cancel,handler: {_ in
             
             if toFocus != nil {
                 toFocus!.becomeFirstResponder()
@@ -73,7 +98,7 @@ class TVCCategoria: UITableViewController {
         
         alertController.addAction(action)
         
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
         
     }
     
@@ -96,7 +121,7 @@ class TVCCategoria: UITableViewController {
         
         preferencias.synchronize()
         
-        if let strPresupuestoNombre = preferencias.valueForKey(dflPresupuestoLookingFor) as? String? {
+        if let strPresupuestoNombre = preferencias.value(forKey: dflPresupuestoLookingFor) as? String? {
             if strPresupuestoNombre != nil {
                 if !strPresupuestoNombre!.isEmpty {
                     //preferencias.setObject(nil, forKey: dflPresupuestoLookingFor)
@@ -104,22 +129,22 @@ class TVCCategoria: UITableViewController {
                     let predicado: NSPredicate =  NSPredicate(format: " descripcion = %@ ", argumentArray: [strPresupuestoNombre!])
                     
                     // Initialize Fetch Request
-                    let fetchRequest = NSFetchRequest(entityName: smModelo.smPresupuesto.entityName)
+                    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: smModelo.smPresupuesto.entityName)
                     
                     // Create Entity Description
                     // Configure Fetch Request
-                    fetchRequest.entity = NSEntityDescription.entityForName(smModelo.smPresupuesto.entityName, inManagedObjectContext: self.moc
+                    fetchRequest.entity = NSEntityDescription.entity(forEntityName: smModelo.smPresupuesto.entityName, in: self.moc
                     )
                     
                     fetchRequest.predicate = predicado
                     
                     do {
-                        self.presupuestos = try self.moc.executeFetchRequest(fetchRequest)
+                        self.presupuestos = try self.moc.fetch(fetchRequest)
                         
                         self.presupuesto = self.presupuestos.first! as? Presupuesto
                         
                         if self.presupuesto == nil {
-                            presupuesto = NSEntityDescription.insertNewObjectForEntityForName(smModelo.smPresupuesto.entityName, inManagedObjectContext: moc) as? Presupuesto
+                            presupuesto = NSEntityDescription.insertNewObject(forEntityName: smModelo.smPresupuesto.entityName, into: moc) as? Presupuesto
                         }
                         
                     } catch {
@@ -131,7 +156,7 @@ class TVCCategoria: UITableViewController {
         }
     }
     
-    func configurationTextField(textField: UITextField!)
+    func configurationTextField(_ textField: UITextField!)
     {
         if textField != nil {
             txtNuevaCategoria = textField!        //Save reference to the UITextField
@@ -139,10 +164,10 @@ class TVCCategoria: UITableViewController {
     }
     
     
-    @IBAction func addCategoria(sender: UIBarButtonItem) {
-        let alert = UIAlertController(title: "New Section", message: "Input a brief description for the new section.  A section allows you grouping incomes and expenditures for a budget.", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addTextFieldWithConfigurationHandler(configurationTextField)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {
+    @IBAction func addCategoria(_ sender: UIBarButtonItem) {
+        let alert = UIAlertController(title: "New Section", message: "Input a brief description for the new section.  A section allows you grouping incomes and expenditures for a budget.", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField(configurationHandler: configurationTextField)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {
             
             (UIAlertAction) in
             
@@ -150,11 +175,11 @@ class TVCCategoria: UITableViewController {
             
             var isSectionOk: Bool = false
 
-            if self.txtNuevaCategoria!.hasText() {
+            if self.txtNuevaCategoria!.hasText {
                 
                 //if self.misCategorias.contains((self.txtNuevaCategoria?.text)!) {
                     
-                let indexFound = self.misCategorias.indexOf((self.txtNuevaCategoria?.text)!)
+                let indexFound = self.misCategorias.index(of: (self.txtNuevaCategoria?.text)!)
                 
                 //print ("Indice recuperado: \(index)")
 
@@ -178,9 +203,9 @@ class TVCCategoria: UITableViewController {
                     
                     self.misCategorias.append(strSeccion)
                     
-                    let lpsSeccion = self.presupuesto?.mutableSetValueForKey(self.smModelo.smPresupuesto.colSecciones)
+                    let lpsSeccion = self.presupuesto?.mutableSetValue(forKey: self.smModelo.smPresupuesto.colSecciones)
                     
-                    let psSeccion = NSEntityDescription.insertNewObjectForEntityForName(self.smModelo.smPresupuestoSeccion.entityName, inManagedObjectContext: self.moc) as? PresupuestoSeccion
+                    let psSeccion = NSEntityDescription.insertNewObject(forEntityName: self.smModelo.smPresupuestoSeccion.entityName, into: self.moc) as? PresupuestoSeccion
                     
                     
                     psSeccion?.setValue(strSeccion, forKey: self.smModelo.smPresupuestoSeccion.colDescripcion)
@@ -191,13 +216,13 @@ class TVCCategoria: UITableViewController {
                     
                     psSeccion?.setValue(self.presupuesto!, forKey: self.smModelo.smPresupuestoSeccion.colPresupuesto)
                     
-                    lpsSeccion?.addObject(psSeccion!)
+                    lpsSeccion?.add(psSeccion!)
                     
                     self.presupuesto?.setValue(lpsSeccion!, forKey: self.smModelo.smPresupuesto.colSecciones)
                     
                     self.tvCategoria.beginUpdates()
                     
-                    self.tvCategoria.insertRowsAtIndexPaths([NSIndexPath(forRow: self.misCategorias.count - 1, inSection: 0)],withRowAnimation: .Automatic)
+                    self.tvCategoria.insertRows(at: [IndexPath(row: self.misCategorias.count - 1, section: 0)],with: .automatic)
                     
                     self.tvCategoria.endUpdates()
                     
@@ -213,9 +238,9 @@ class TVCCategoria: UITableViewController {
         ) // closing UIAlertAction
         ) // closing addAction
         
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
         
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func guardarPresupuesto() {
@@ -235,22 +260,22 @@ class TVCCategoria: UITableViewController {
     
 
     // MARK: - Table view data source
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return self.presupuesto?.valueForKey(smModelo.smPresupuesto.colDescripcion) as? String
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return self.presupuesto?.value(forKey: smModelo.smPresupuesto.colDescripcion) as? String
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return misCategorias.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellCategoria", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategoria", for: indexPath)
 
         // Configure the cell...
         let fontName = "Verdana"
@@ -261,26 +286,26 @@ class TVCCategoria: UITableViewController {
     }
 
     // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
 
     // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             // Delete the row from the data source
 
-            var arrSeccion = self.presupuesto?.mutableSetValueForKey(smModelo.smPresupuesto.colSecciones).allObjects
+            var arrSeccion = self.presupuesto?.mutableSetValue(forKey: smModelo.smPresupuesto.colSecciones).allObjects
             
             if arrSeccion?.count > 0 {
                 let seccion = arrSeccion![indexPath.row] as? PresupuestoSeccion
                 
-                let egresos = seccion?.valueForKey(smModelo.smPresupuestoSeccion.colTotalEgresos) as? Double
-                let ingresos = seccion?.valueForKey(smModelo.smPresupuestoSeccion.colTotalIngresos) as? Double
+                let egresos = seccion?.value(forKey: smModelo.smPresupuestoSeccion.colTotalEgresos) as? Double
+                let ingresos = seccion?.value(forKey: smModelo.smPresupuestoSeccion.colTotalIngresos) as? Double
                 
-                var totalIngresos = self.presupuesto?.valueForKey(smModelo.smPresupuesto.colIngresos) as? Double
-                var totalEgresos = self.presupuesto?.valueForKey(smModelo.smPresupuesto.colEjecutado) as? Double
+                var totalIngresos = self.presupuesto?.value(forKey: smModelo.smPresupuesto.colIngresos) as? Double
+                var totalEgresos = self.presupuesto?.value(forKey: smModelo.smPresupuesto.colEjecutado) as? Double
                 
                 totalIngresos = totalIngresos! - ingresos!
                 totalEgresos = totalEgresos! - egresos!
@@ -288,9 +313,9 @@ class TVCCategoria: UITableViewController {
                 self.presupuesto?.setValue(totalIngresos!, forKey: smModelo.smPresupuesto.colIngresos)
                 self.presupuesto?.setValue(totalEgresos!, forKey: smModelo.smPresupuesto.colEjecutado)
                 
-                self.moc.deleteObject(arrSeccion?[indexPath.row] as! NSManagedObject)
+                self.moc.delete(arrSeccion?[indexPath.row] as! NSManagedObject)
                 
-                arrSeccion?.removeAtIndex(indexPath.row)
+                arrSeccion?.remove(at: indexPath.row)
                 
                 do {
                     try self.moc.save()
@@ -301,7 +326,7 @@ class TVCCategoria: UITableViewController {
                     print(deleteError)
                 }
             }
-        } else if editingStyle == .Insert {
+        } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }

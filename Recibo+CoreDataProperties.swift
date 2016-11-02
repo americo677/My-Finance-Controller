@@ -15,7 +15,7 @@ import CoreData
 extension Recibo {
 
     @NSManaged var descripcion: String?
-    @NSManaged var fecha: NSDate?
+    @NSManaged var fecha: Date?
     @NSManaged var tipo: NSNumber?
     @NSManaged var valor: NSNumber?
     @NSManaged var seccion: PresupuestoSeccion?

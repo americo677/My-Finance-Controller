@@ -9,6 +9,30 @@
 import UIKit
 import CoreData
 import MessageUI
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerDelegate {
 
@@ -30,11 +54,11 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
     
     var intTotalRecibos: Int = 0
     
-    let dtFormatter: NSDateFormatter = NSDateFormatter()
-    let fmtMoneda : NSNumberFormatter = NSNumberFormatter()
-    let fmtFloat : NSNumberFormatter = NSNumberFormatter()
+    let dtFormatter: DateFormatter = DateFormatter()
+    let fmtMoneda : NumberFormatter = NumberFormatter()
+    let fmtFloat : NumberFormatter = NumberFormatter()
     
-    var indexSelected: NSIndexPath = NSIndexPath()
+    var indexSelected: IndexPath = IndexPath()
     let strAppTitle = "My Finance Controller"
     
     let MAX_ROW_HEIGHT: CGFloat = 50
@@ -54,15 +78,15 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         dtFormatter.dateFormat = "dd/MM/yyyy"
         
         // Preparación de los formateadores númericos
-        fmtMoneda.numberStyle = .CurrencyStyle
+        fmtMoneda.numberStyle = .currency
         fmtMoneda.maximumFractionDigits = 2
         
-        fmtFloat.numberStyle = .NoStyle
+        fmtFloat.numberStyle = .none
         fmtFloat.maximumFractionDigits = 2
         
     }
     
-    func writeCoreDataObjectToCVS(objects: [NSManagedObject], named: String) -> String {
+    func writeCoreDataObjectToCVS(_ objects: [NSManagedObject], named: String) -> String {
         
         guard objects.count > 0 else {
             return ""
@@ -77,17 +101,17 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         if self.presupuesto != nil {
             strLine += (self.presupuesto?.descripcion)! + ";"
             
-            strLine += dtFormatter.stringFromDate((self.presupuesto?.fechaInicio)!) + ";"
+            strLine += dtFormatter.string(from: (self.presupuesto?.fechaInicio)! as Date) + ";"
             
-            strLine += dtFormatter.stringFromDate((self.presupuesto?.fechaFinal)!) + ";"
+            strLine += dtFormatter.string(from: (self.presupuesto?.fechaFinal)! as Date) + ";"
             
-            strLine += fmtFloat.stringFromNumber((self.presupuesto?.valor)!)! + ";"
+            strLine += fmtFloat.string(from: (self.presupuesto?.valor)!)! + ";"
             
-            strLine += fmtFloat.stringFromNumber((self.presupuesto?.umbral)!)! + "%;"
+            strLine += fmtFloat.string(from: (self.presupuesto?.umbral)!)! + "%;"
             
-            strLine += fmtFloat.stringFromNumber((self.presupuesto?.ingresos)!)! + ";"
+            strLine += fmtFloat.string(from: (self.presupuesto?.ingresos)!)! + ";"
             
-            strLine += fmtFloat.stringFromNumber((self.presupuesto?.ejecutado)!)! + "\n"
+            strLine += fmtFloat.string(from: (self.presupuesto?.ejecutado)!)! + "\n"
         }
         
         
@@ -101,8 +125,8 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
             strLine += headerSection
             
             strLine += (seccion?.descripcion)! + ";"
-            strLine += fmtFloat.stringFromNumber((seccion?.totalIngresos)!)! + ";"
-            strLine += fmtFloat.stringFromNumber((seccion?.totalEgresos)!)! + "\n"
+            strLine += fmtFloat.string(from: (seccion?.totalIngresos)!)! + ";"
+            strLine += fmtFloat.string(from: (seccion?.totalEgresos)!)! + "\n"
             
             if seccion?.recibos?.count > 0 {
                 let recibos = seccion?.recibos?.allObjects as? [Recibo]
@@ -114,11 +138,11 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
                     let recibo = subObject as Recibo
                     
                     strLine += recibo.descripcion! + ";"
-                    strLine += dtFormatter.stringFromDate(recibo.fecha!) + ";"
+                    strLine += dtFormatter.string(from: recibo.fecha! as Date) + ";"
                     if recibo.tipo?.hashValue == eTipoRegistro.income.hashValue {
-                        strLine += fmtFloat.stringFromNumber(recibo.valor!)! + ";\n"
+                        strLine += fmtFloat.string(from: recibo.valor!)! + ";\n"
                     } else {
-                        strLine += ";" + fmtFloat.stringFromNumber(recibo.valor!)! + "\n"
+                        strLine += ";" + fmtFloat.string(from: recibo.valor!)! + "\n"
                     }
                 }
             }
@@ -147,28 +171,28 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
             
             let csvString = self.writeCoreDataObjectToCVS(self.presupuesto?.secciones?.allObjects as! [NSManagedObject] ,named: "no_name")
             
-            let data = csvString.dataUsingEncoding(NSUTF8StringEncoding)
+            let data = csvString.data(using: String.Encoding.utf8)
             
-            let strExportFileName = self.presupuesto?.descripcion?.stringByReplacingOccurrencesOfString(" ", withString: "_")
+            let strExportFileName = self.presupuesto?.descripcion?.replacingOccurrences(of: " ", with: "_")
             
             mail.addAttachmentData(data!, mimeType: "text/csv", fileName: "\(strExportFileName!).csv")
             
-            self.presentViewController(mail, animated: true, completion: nil)
+            self.present(mail, animated: true, completion: nil)
         } else {
             // show failure alert
             showCustomWarningAlert("You must authorize sending e-mail.", toFocus: nil)
         }
     }
     
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        controller.dismissViewControllerAnimated(true, completion: nil)
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 
-    func btnActionOnTouchInsideup(sender: AnyObject) {
+    func btnActionOnTouchInsideup(_ sender: AnyObject) {
         
-        let alertController = UIAlertController(title: self.strAppTitle, message: "You can send your budget using E-mail.", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: self.strAppTitle, message: "You can send your budget using E-mail.", preferredStyle: .alert)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             print(action)
         }
         //alertController.addAction(cancelAction)
@@ -178,7 +202,7 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
             
         //}
         
-        let oneAction = UIAlertAction(title: "Send E-mail", style: .Default) { (_) in
+        let oneAction = UIAlertAction(title: "Send E-mail", style: .default) { (_) in
             self.sendEmail()
         }
 
@@ -192,7 +216,7 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         alertController.addAction(cancelAction)
         //alertController.addAction(destroyAction)
         
-        self.presentViewController(alertController, animated: true) {
+        self.present(alertController, animated: true) {
         }
         
     }
@@ -202,7 +226,7 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         
         //self.tvPresupuesto.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier: "CellPresupuestoDetalle")
         
-        self.tvPresupuesto.registerClass(UITableViewHeaderFooterView.classForCoder(), forHeaderFooterViewReuseIdentifier: "customHeaderView")
+        self.tvPresupuesto.register(UITableViewHeaderFooterView.classForCoder(), forHeaderFooterViewReuseIdentifier: "customHeaderView")
         
         self.initTableViewRowHeight()
         
@@ -215,18 +239,18 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         #endif
         
         #if FULL_VERSION
-            self.navigationController?.toolbarHidden = false
+            self.navigationController?.isToolbarHidden = false
             var items = [AnyObject]()
-            items.append(UIBarButtonItem(title: "Send", style: .Plain, target: self,action: #selector(self.btnActionOnTouchInsideup)))
+            items.append(UIBarButtonItem(title: "Send", style: .plain, target: self,action: #selector(self.btnActionOnTouchInsideup)))
             self.toolbarItems = items as? [UIBarButtonItem]
         #endif
         
         let sublayer = CALayer.init()
-        sublayer.backgroundColor = UIColor.customLightGrayColor().CGColor
-        sublayer.shadowOffset = CGSizeMake(0, 3)
+        sublayer.backgroundColor = UIColor.customLightGrayColor().cgColor
+        sublayer.shadowOffset = CGSize(width: 0, height: 3)
         sublayer.shadowRadius = 5.0
         sublayer.shadowOpacity = 0.8;
-        sublayer.frame = CGRectMake(0, 0, 420, 42000)
+        sublayer.frame = CGRect(x: 0, y: 0, width: 420, height: 42000)
         self.view.layer.addSublayer(sublayer)
         
         self.title = self.presupuesto?.descripcion
@@ -242,11 +266,11 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         self.initFormatters()
     }
     
-    func showCustomWarningAlert(strMensaje: String, toFocus: UITextField?) {
+    func showCustomWarningAlert(_ strMensaje: String, toFocus: UITextField?) {
         let alertController = UIAlertController(title: strAppTitle, message:
-            strMensaje, preferredStyle: UIAlertControllerStyle.Alert)
+            strMensaje, preferredStyle: UIAlertControllerStyle.alert)
         
-        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel,handler: {_ in
+        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.cancel,handler: {_ in
             
             if toFocus != nil {
                 toFocus!.becomeFirstResponder()
@@ -256,11 +280,11 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         
         alertController.addAction(action)
         
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
         
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         
         #if LITE_VERSION
             self.intTotalRecibos = 0
@@ -297,29 +321,29 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         #endif
         
         #if FULL_VERSION
-            self.bbtnReceipt.enabled = true
+            self.bbtnReceipt.isEnabled = true
             if self.presupuesto != nil {
                 
                 let secciones = self.presupuesto?.secciones?.allObjects as! [PresupuestoSeccion]
                 
                 if secciones.count <= 0 {
-                    bbtnReceipt.enabled = false
+                    bbtnReceipt.isEnabled = false
                     showCustomWarningAlert("You must record at least a section!.", toFocus: nil)
                 } else {
                     let seccion = secciones[0]
                     
                     if seccion.descripcion != "" {
-                        bbtnReceipt.enabled = true
+                        bbtnReceipt.isEnabled = true
                     } else {
-                        bbtnReceipt.enabled = false
+                        bbtnReceipt.isEnabled = false
                     }
                 }
             }
         #endif
     }
     
-    override func viewDidAppear(animated: Bool) {
-        tvPresupuesto.deselectRowAtIndexPath(indexSelected, animated: true)
+    override func viewDidAppear(_ animated: Bool) {
+        tvPresupuesto.deselectRow(at: indexSelected, animated: true)
         tvPresupuesto.reloadData()
     }
     
@@ -329,7 +353,7 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
     }
 
     // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         if self.presupuesto != nil {
             return (self.presupuesto?.secciones?.count)!
@@ -339,9 +363,9 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
     }
     
     // MARK: - Celda personalizada
-    func customTableView(ctableView: UITableView, cindexPath: NSIndexPath, crecibo: Recibo, caccessoryType: UITableViewCellAccessoryType) -> UITableViewCell {
+    func customTableView(_ ctableView: UITableView, cindexPath: IndexPath, crecibo: Recibo, caccessoryType: UITableViewCellAccessoryType) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("CellPresupuestoDetalle", forIndexPath: cindexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellPresupuestoDetalle", for: cindexPath)
         
         // Para evitar el re-writting de los labels personalizados
         for cellView in cell.contentView.subviews {
@@ -353,41 +377,41 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         //print("Tipo: \(crecibo.valueForKey(smModelo.smRecibo.colTipo) as! Int!)")
         //print("Valor: \(fmtMoneda.stringFromNumber( crecibo.valueForKey(smModelo.smRecibo.colValor) as! Double)!)")
 
-        let strDescripcion = crecibo.valueForKey(smModelo.smRecibo.colDescripcion) as! String!
-        let dtFecha        = crecibo.valueForKey(smModelo.smRecibo.colFecha) as! NSDate!
-        let intTipo        = crecibo.valueForKey(smModelo.smRecibo.colTipo) as! Int!
-        let strValor       = fmtMoneda.stringFromNumber( crecibo.valueForKey(smModelo.smRecibo.colValor) as! Double)!
+        let strDescripcion = crecibo.value(forKey: smModelo.smRecibo.colDescripcion) as! String!
+        let dtFecha        = crecibo.value(forKey: smModelo.smRecibo.colFecha) as! Date!
+        let intTipo        = crecibo.value(forKey: smModelo.smRecibo.colTipo) as! Int!
+        let strValor       = fmtMoneda.string(from: NSNumber.init(value: crecibo.value(forKey: smModelo.smRecibo.colValor) as! Double))!
         
         let fontName =  "Verdana-Bold"
         let fontNameNumeric = "Verdana"
         
-        let labelNombre: UILabel = UILabel(frame: CGRectMake(17.0, 0.0, 377.0, 30.0))
+        let labelNombre: UILabel = UILabel(frame: CGRect(x: 17.0, y: 0.0, width: 377.0, height: 30.0))
         
-        labelNombre.text = "  " + strDescripcion
+        labelNombre.text = "  " + strDescripcion!
         labelNombre.font = UIFont(name: fontName, size: 13)
-        labelNombre.textAlignment = NSTextAlignment.Left
-        labelNombre.textColor = UIColor.blackColor()
+        labelNombre.textAlignment = NSTextAlignment.left
+        labelNombre.textColor = UIColor.black
         labelNombre.tag = cindexPath.row
         cell.contentView.addSubview(labelNombre)
 
-        let labelFecha: UILabel = UILabel(frame: CGRectMake(17.0, 25.0, 100.0, 30.0))
-        labelFecha.text = "  " + dtFormatter.stringFromDate(dtFecha!)
+        let labelFecha: UILabel = UILabel(frame: CGRect(x: 17.0, y: 25.0, width: 100.0, height: 30.0))
+        labelFecha.text = "  " + dtFormatter.string(from: dtFecha!)
         labelFecha.font = UIFont(name: fontNameNumeric, size: 12)
-        labelFecha.textAlignment = NSTextAlignment.Left
-        labelFecha.textColor = UIColor.blackColor()
+        labelFecha.textAlignment = NSTextAlignment.left
+        labelFecha.textColor = UIColor.black
         labelFecha.tag = cindexPath.row
         cell.contentView.addSubview(labelFecha)
         
         
-        let labelValor: UILabel = UILabel(frame: CGRectMake(250.0, 25.0, 100.0, 30.0))
+        let labelValor: UILabel = UILabel(frame: CGRect(x: 250.0, y: 25.0, width: 100.0, height: 30.0))
         labelValor.text = String(format: "\(strValor)")
         labelValor.font = UIFont(name: fontNameNumeric, size: 12)
-        labelValor.textAlignment = NSTextAlignment.Right
+        labelValor.textAlignment = NSTextAlignment.right
         labelValor.tag = cindexPath.row
         if intTipo == 0 {
-            labelValor.textColor = UIColor.blueColor()
+            labelValor.textColor = UIColor.blue
         } else if intTipo == 1 {
-            labelValor.textColor = UIColor.redColor()
+            labelValor.textColor = UIColor.red
         }
         labelValor.tag = cindexPath.row
         cell.contentView.addSubview(labelValor)
@@ -398,28 +422,28 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return MAX_SECTION_ROW_HEIGHT
     }
 
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: NSInteger) -> UIView {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: NSInteger) -> UIView {
         
         let cellHeaderViewIdentifier = "customHeaderView"
 
-        let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(cellHeaderViewIdentifier)! as UITableViewHeaderFooterView
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: cellHeaderViewIdentifier)! as UITableViewHeaderFooterView
         
         // Para evitar el re-writting de los labels personalizados
         for headerViewItem in headerView.contentView.subviews {
             headerViewItem.removeFromSuperview()
         }
         
-        headerView.contentView.frame = CGRectMake( 0.0, 0.0, 350.0, 55.0)
-        headerView.contentView.backgroundColor = UIColor.grayColor()
+        headerView.contentView.frame = CGRect( x: 0.0, y: 0.0, width: 350.0, height: 55.0)
+        headerView.contentView.backgroundColor = UIColor.gray
 
-        let labelSeccion   : UILabel = UILabel(frame: CGRectMake(0.0,  0, 350.0, 35))
-        let labelPorcentaje: UILabel = UILabel(frame: CGRectMake(0.0, 35.00,  350.0, 20.0))
+        let labelSeccion   : UILabel = UILabel(frame: CGRect(x: 0.0,  y: 0, width: 350.0, height: 35))
+        let labelPorcentaje: UILabel = UILabel(frame: CGRect(x: 0.0, y: 35.00,  width: 350.0, height: 20.0))
         
-        labelSeccion.lineBreakMode = .ByTruncatingTail
+        labelSeccion.lineBreakMode = .byTruncatingTail
         labelSeccion.numberOfLines = 2
 
         if self.presupuesto != nil {
@@ -435,12 +459,12 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
 
             labelSeccion.text = strSeccion
             labelSeccion.font = UIFont(name: fontName, size: 14)
-            labelSeccion.textColor = UIColor.whiteColor()
+            labelSeccion.textColor = UIColor.white
             labelSeccion.tag = section.hashValue
             
-            labelPorcentaje.text =  "  At \(fmtFloat.stringFromNumber(porcentaje)!)%"
+            labelPorcentaje.text =  "  At \(fmtFloat.string(from: NSNumber.init(value: porcentaje))!)%"
             labelPorcentaje.font =  UIFont(name: fontNameNumeric, size: 12)
-            labelPorcentaje.textColor = UIColor.whiteColor()
+            labelPorcentaje.textColor = UIColor.white
             labelPorcentaje.tag = section.hashValue
 
             headerView.contentView.addSubview(labelSeccion)
@@ -450,7 +474,7 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         return headerView;
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         var numberOfRows: Int = 0
         
@@ -461,7 +485,7 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
             
             
             // todo: para revisar
-            self.arrRecibo = seccion.mutableSetValueForKey(smModelo.smPresupuestoSeccion.colRecibos).allObjects
+            self.arrRecibo = seccion.mutableSetValue(forKey: smModelo.smPresupuestoSeccion.colRecibos).allObjects as [AnyObject]
             
             numberOfRows = self.arrRecibo.count
             
@@ -470,60 +494,60 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         return numberOfRows
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //let cell = tableView.dequeueReusableCellWithIdentifier("CellPresupuestoDetalle", forIndexPath: indexPath)
 
         // Configure the cell...
         var cell: UITableViewCell?
         
-        let arrSeccion = self.presupuesto?.mutableSetValueForKey(smModelo.smPresupuesto.colSecciones).allObjects
+        let arrSeccion = self.presupuesto?.mutableSetValue(forKey: smModelo.smPresupuesto.colSecciones).allObjects
         
         let seccion = arrSeccion![indexPath.section] as! PresupuestoSeccion
         
-        self.arrRecibo = seccion.mutableSetValueForKey(smModelo.smPresupuestoSeccion.colRecibos).allObjects
+        self.arrRecibo = seccion.mutableSetValue(forKey: smModelo.smPresupuestoSeccion.colRecibos).allObjects as [AnyObject]
 
         if self.arrRecibo.count > 0 {
             let recibo = self.arrRecibo[indexPath.row] as! Recibo
         
-            let strDescripcion = recibo.valueForKey(smModelo.smRecibo.colDescripcion) as! String!
+            let strDescripcion = recibo.value(forKey: smModelo.smRecibo.colDescripcion) as! String!
             //print("Indice: \(indexPath.row)")
             //print("Descripción del recibo: \(strDescripcion)")
             
-            let dtFecha        = recibo.valueForKey(smModelo.smRecibo.colFecha) as! NSDate!
+            let dtFecha        = recibo.value(forKey: smModelo.smRecibo.colFecha) as! Date!
             //print("Fecha del recibo: \(dtFecha)")
 
-            let douValor       = recibo.valueForKey(smModelo.smRecibo.colValor) as! Double
+            let douValor       = recibo.value(forKey: smModelo.smRecibo.colValor) as! Double
             //print("Valor del recibo: \(douValor)")
             
             if strDescripcion == nil && dtFecha == nil && douValor == 0 {
-                self.arrRecibo.removeAtIndex(indexPath.row)
-                cell = tableView.dequeueReusableCellWithIdentifier("CellPresupuestoDetalle", forIndexPath: indexPath)
+                self.arrRecibo.remove(at: indexPath.row)
+                cell = tableView.dequeueReusableCell(withIdentifier: "CellPresupuestoDetalle", for: indexPath)
             } else {
-                cell = customTableView(tableView, cindexPath: indexPath, crecibo: recibo, caccessoryType: .DisclosureIndicator)
+                cell = customTableView(tableView, cindexPath: indexPath, crecibo: recibo, caccessoryType: .disclosureIndicator)
             }
         } else {
-            cell = tableView.dequeueReusableCellWithIdentifier("CellPresupuestoDetalle", forIndexPath: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: "CellPresupuestoDetalle", for: indexPath)
         }
         
         return cell!
     }
 
     
-    @IBAction func barBtnItemAddOnTouchInsideDown(sender: UIBarButtonItem) {
-        self.performSegueWithIdentifier("segueRecibo", sender: self)
+    @IBAction func barBtnItemAddOnTouchInsideDown(_ sender: UIBarButtonItem) {
+        self.performSegue(withIdentifier: "segueRecibo", sender: self)
     }
     
     
     // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
  
 
     // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             // Delete the row from the data source
             //#if LITE_VERSION
                 //showCustomWarningAlert("This is the demo version.  To enjoy the full version of \(self.strAppTitle) we invite you to obtain the full version.  Thank you!.", toFocus: nil)
@@ -533,19 +557,19 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
             //#if FULL_VERSION
                 let arrSeccion = self.presupuesto?.secciones?.allObjects as! [PresupuestoSeccion]
                 let seccion = arrSeccion[indexPath.section] as PresupuestoSeccion
-                self.arrRecibo = seccion.mutableSetValueForKey(smModelo.smPresupuestoSeccion.colRecibos).allObjects
+                self.arrRecibo = seccion.mutableSetValue(forKey: smModelo.smPresupuestoSeccion.colRecibos).allObjects as [AnyObject]
                 
                 if self.arrRecibo.count > 0 {
                     
                     let recibo = self.arrRecibo[indexPath.row] as! NSManagedObject
                     
-                    let monto = recibo.valueForKey(smModelo.smRecibo.colValor) as! Double
+                    let monto = recibo.value(forKey: smModelo.smRecibo.colValor) as! Double
                     
-                    let tipo  = recibo.valueForKey(smModelo.smRecibo.colTipo) as! Int
+                    let tipo  = recibo.value(forKey: smModelo.smRecibo.colTipo) as! Int
                     
                     if eTipoRegistro.expenditure.hashValue == tipo {
-                        var egreso  = (seccion.valueForKey(smModelo.smPresupuestoSeccion.colTotalEgresos) as? Double)!
-                        var egresos = (self.presupuesto?.valueForKey(smModelo.smPresupuesto.colEjecutado) as? Double)!
+                        var egreso  = (seccion.value(forKey: smModelo.smPresupuestoSeccion.colTotalEgresos) as? Double)!
+                        var egresos = (self.presupuesto?.value(forKey: smModelo.smPresupuesto.colEjecutado) as? Double)!
                         
                         egreso -= monto
                         egresos -= monto
@@ -553,8 +577,8 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
                         seccion.setValue(egreso, forKey: smModelo.smPresupuestoSeccion.colTotalEgresos)
                         self.presupuesto?.setValue(egresos, forKey: smModelo.smPresupuesto.colEjecutado)
                     } else if eTipoRegistro.income.hashValue == tipo {
-                        var ingreso = (seccion.valueForKey(smModelo.smPresupuestoSeccion.colTotalIngresos) as? Double)!
-                        var ingresos = (self.presupuesto?.valueForKey(smModelo.smPresupuesto.colIngresos) as? Double)!
+                        var ingreso = (seccion.value(forKey: smModelo.smPresupuestoSeccion.colTotalIngresos) as? Double)!
+                        var ingresos = (self.presupuesto?.value(forKey: smModelo.smPresupuesto.colIngresos) as? Double)!
                         
                         ingreso -= monto
                         ingresos -= monto
@@ -563,12 +587,12 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
                         self.presupuesto?.setValue(ingresos, forKey: smModelo.smPresupuesto.colIngresos)
                     }
                     
-                    self.moc.deleteObject(self.arrRecibo[indexPath.row] as! NSManagedObject)
+                    self.moc.delete(self.arrRecibo[indexPath.row] as! NSManagedObject)
                     
-                    self.arrRecibo.removeAtIndex(indexPath.row)
+                    self.arrRecibo.remove(at: indexPath.row)
                     do {
                         try self.moc.save()
-                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                        tableView.deleteRows(at: [indexPath], with: .fade)
                     } catch {
                         let deleteError = error as NSError
                         print(deleteError)
@@ -578,33 +602,33 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
             
             
             
-        } else if editingStyle == .Insert {
+        } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
 
-     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let arrSeccion = self.presupuesto?.mutableSetValueForKey(smModelo.smPresupuesto.colSecciones).allObjects
+        let arrSeccion = self.presupuesto?.mutableSetValue(forKey: smModelo.smPresupuesto.colSecciones).allObjects
         
         self.seccion = arrSeccion![indexPath.section] as? PresupuestoSeccion
         
-        self.arrRecibo = self.seccion!.mutableSetValueForKey(smModelo.smPresupuestoSeccion.colRecibos).allObjects
+        self.arrRecibo = self.seccion!.mutableSetValue(forKey: smModelo.smPresupuestoSeccion.colRecibos).allObjects as [AnyObject]
         
         if self.arrRecibo.count > 0 {
             self.recibo = self.arrRecibo[indexPath.row] as? Recibo
         } else {
             self.recibo = nil
         }
-            self.performSegueWithIdentifier("segueRecibo", sender: self)
+            self.performSegue(withIdentifier: "segueRecibo", sender: self)
         
         self.indexSelected = indexPath
      }
 
     
-    @IBAction func btnReceiptOnTouchInsideDonw(sender: UIBarButtonItem) {
+    @IBAction func btnReceiptOnTouchInsideDonw(_ sender: UIBarButtonItem) {
 
-        self.performSegueWithIdentifier("segueNewRecibo", sender: self)
+        self.performSegue(withIdentifier: "segueNewRecibo", sender: self)
     }
     
     
@@ -625,29 +649,29 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
     */
     
     
-    @IBAction func bbtnActionOnTouchInsideUp(sender: UIBarButtonItem) {
+    @IBAction func bbtnActionOnTouchInsideUp(_ sender: UIBarButtonItem) {
     }
     
 
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if segue.identifier == "segueRecibo" {
-            let vcReg: VCRegistro = segue.destinationViewController as! VCRegistro
+            let vcReg: VCRegistro = segue.destination as! VCRegistro
             vcReg.presupuesto = self.presupuesto
             vcReg.moc         = self.moc
-            vcReg.arrSeccion = (self.presupuesto?.secciones?.allObjects as? [PresupuestoSeccion])?.sort { $0.descripcion < $1.descripcion }
+            vcReg.arrSeccion = (self.presupuesto?.secciones?.allObjects as? [PresupuestoSeccion])?.sorted { $0.descripcion < $1.descripcion }
             vcReg.seccion = self.seccion
             vcReg.recibo = self.recibo
             vcReg.intTotalRecibos = self.intTotalRecibos
         } else if segue.identifier == "segueNewRecibo" {
-            let vcReg: VCRegistro = segue.destinationViewController as! VCRegistro
+            let vcReg: VCRegistro = segue.destination as! VCRegistro
             vcReg.presupuesto = self.presupuesto
             vcReg.moc         = self.moc
-            vcReg.arrSeccion = (self.presupuesto?.secciones?.allObjects as? [PresupuestoSeccion])?.sort { $0.descripcion < $1.descripcion }
+            vcReg.arrSeccion = (self.presupuesto?.secciones?.allObjects as? [PresupuestoSeccion])?.sorted { $0.descripcion < $1.descripcion }
             vcReg.seccion = nil
             vcReg.recibo  = nil
             vcReg.intTotalRecibos = self.intTotalRecibos
