@@ -1,0 +1,598 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1E04B29D1D6B752800A0E294 /* JetAinMemSoft.001.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E04B29C1D6B752800A0E294 /* JetAinMemSoft.001.png */; };
+		1E04B29E1D6B752800A0E294 /* JetAinMemSoft.001.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E04B29C1D6B752800A0E294 /* JetAinMemSoft.001.png */; };
+		1E2FB4561D47E3E40005C700 /* SRecibo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2FB4551D47E3E40005C700 /* SRecibo.swift */; };
+		1E3340741D221EFE001AE9FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3340731D221EFE001AE9FB /* AppDelegate.swift */; };
+		1E3340791D221EFE001AE9FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E3340771D221EFE001AE9FB /* Main.storyboard */; };
+		1E33407B1D221EFE001AE9FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E33407A1D221EFE001AE9FB /* Assets.xcassets */; };
+		1E33407E1D221EFE001AE9FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E33407C1D221EFE001AE9FB /* LaunchScreen.storyboard */; };
+		1E39509F1D5BC11400F5578A /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E39509E1D5BC11400F5578A /* UIColor.swift */; };
+		1E3C48781D6411FB00527508 /* PresupuestoSeccion+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD05011D3AD93700FF6C56 /* PresupuestoSeccion+CoreDataProperties.swift */; };
+		1E3C48791D6411FB00527508 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD04FB1D3AB9AF00FF6C56 /* DataController.swift */; };
+		1E3C487A1D6411FB00527508 /* Recibo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD04FF1D3AD93700FF6C56 /* Recibo+CoreDataProperties.swift */; };
+		1E3C487B1D6411FB00527508 /* CStructureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED318A41D3B3F8F00EF0D34 /* CStructureModel.swift */; };
+		1E3C487C1D6411FB00527508 /* VCRegistro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECD2F991D46D30900989691 /* VCRegistro.swift */; };
+		1E3C487D1D6411FB00527508 /* Presupuesto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD04FE1D3AD93700FF6C56 /* Presupuesto.swift */; };
+		1E3C487E1D6411FB00527508 /* TVCPresupuestos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBCA64D1D2C32CE00055086 /* TVCPresupuestos.swift */; };
+		1E3C487F1D6411FB00527508 /* TVCPresupuestoDetalle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD04F41D39B3D200FF6C56 /* TVCPresupuestoDetalle.swift */; };
+		1E3C48801D6411FB00527508 /* SPresupuesto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED318A21D3B3F0700EF0D34 /* SPresupuesto.swift */; };
+		1E3C48811D6411FB00527508 /* TVCCategoria.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBCA6511D2C33A500055086 /* TVCCategoria.swift */; };
+		1E3C48821D6411FB00527508 /* Presupuesto+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF24601D63B9FD00993433 /* Presupuesto+CoreDataProperties.swift */; };
+		1E3C48831D6411FB00527508 /* SRecibo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2FB4551D47E3E40005C700 /* SRecibo.swift */; };
+		1E3C48841D6411FB00527508 /* SPresupuestoSeccion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED318A61D3B43B300EF0D34 /* SPresupuestoSeccion.swift */; };
+		1E3C48851D6411FB00527508 /* PresupuestoSeccion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD05021D3AD93700FF6C56 /* PresupuestoSeccion.swift */; };
+		1E3C48861D6411FB00527508 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E39509E1D5BC11400F5578A /* UIColor.swift */; };
+		1E3C48871D6411FB00527508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3340731D221EFE001AE9FB /* AppDelegate.swift */; };
+		1E3C48881D6411FB00527508 /* CDModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD04F81D3AB77F00FF6C56 /* CDModel.xcdatamodeld */; };
+		1E3C48891D6411FB00527508 /* Recibo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD05001D3AD93700FF6C56 /* Recibo.swift */; };
+		1E3C488A1D6411FB00527508 /* TVCPresupuesto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBCA64F1D2C336500055086 /* TVCPresupuesto.swift */; };
+		1E3C488D1D6411FB00527508 /* Verdana.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E81CB091D5A77AB002CEC5F /* Verdana.ttf */; };
+		1E3C488F1D6411FB00527508 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E33407C1D221EFE001AE9FB /* LaunchScreen.storyboard */; };
+		1E3C48901D6411FB00527508 /* My Finance Controllerx58.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EDF24631D63C0E000993433 /* My Finance Controllerx58.png */; };
+		1E3C48911D6411FB00527508 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E33407A1D221EFE001AE9FB /* Assets.xcassets */; };
+		1E3C48921D6411FB00527508 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E3340771D221EFE001AE9FB /* Main.storyboard */; };
+		1E3C48931D6411FB00527508 /* My Finance Controllerx80.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EDF24641D63C0E000993433 /* My Finance Controllerx80.png */; };
+		1E3C48941D6411FB00527508 /* My Finance Controller120.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EDF24621D63C0E000993433 /* My Finance Controller120.png */; };
+		1E3C48951D6411FB00527508 /* My Finance Controllerx180.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EDF24651D63C0E000993433 /* My Finance Controllerx180.png */; };
+		1E3C489F1D641EF600527508 /* My Finance Controller Lite180.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3C489B1D641EF600527508 /* My Finance Controller Lite180.png */; };
+		1E3C48A01D641EF600527508 /* My Finance Controller Litex58.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3C489C1D641EF600527508 /* My Finance Controller Litex58.png */; };
+		1E3C48A11D641EF600527508 /* My Finance Controller Litex80.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3C489D1D641EF600527508 /* My Finance Controller Litex80.png */; };
+		1E3C48A21D641EF600527508 /* My Finance Controller Litex120.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3C489E1D641EF600527508 /* My Finance Controller Litex120.png */; };
+		1E5685C41D720C9600D79CC7 /* initialbudget.json in Resources */ = {isa = PBXBuildFile; fileRef = 1E5685C31D720C9600D79CC7 /* initialbudget.json */; };
+		1E5685C51D720C9600D79CC7 /* initialbudget.json in Resources */ = {isa = PBXBuildFile; fileRef = 1E5685C31D720C9600D79CC7 /* initialbudget.json */; };
+		1E81CB0A1D5A77C3002CEC5F /* Verdana.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E81CB091D5A77AB002CEC5F /* Verdana.ttf */; };
+		1EBCA64E1D2C32CE00055086 /* TVCPresupuestos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBCA64D1D2C32CE00055086 /* TVCPresupuestos.swift */; };
+		1EBCA6501D2C336500055086 /* TVCPresupuesto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBCA64F1D2C336500055086 /* TVCPresupuesto.swift */; };
+		1EBCA6521D2C33A500055086 /* TVCCategoria.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBCA6511D2C33A500055086 /* TVCCategoria.swift */; };
+		1ECD2F9A1D46D30900989691 /* VCRegistro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECD2F991D46D30900989691 /* VCRegistro.swift */; };
+		1ED318A31D3B3F0700EF0D34 /* SPresupuesto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED318A21D3B3F0700EF0D34 /* SPresupuesto.swift */; };
+		1ED318A51D3B3F8F00EF0D34 /* CStructureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED318A41D3B3F8F00EF0D34 /* CStructureModel.swift */; };
+		1ED318A71D3B43B300EF0D34 /* SPresupuestoSeccion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED318A61D3B43B300EF0D34 /* SPresupuestoSeccion.swift */; };
+		1ED659C91D67BFC000BB311A /* CCGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED659C81D67BFC000BB311A /* CCGlobal.swift */; };
+		1ED659CA1D67BFC000BB311A /* CCGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED659C81D67BFC000BB311A /* CCGlobal.swift */; };
+		1EDF24611D63B9FD00993433 /* Presupuesto+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF24601D63B9FD00993433 /* Presupuesto+CoreDataProperties.swift */; };
+		1EDF24661D63C0E000993433 /* My Finance Controller120.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EDF24621D63C0E000993433 /* My Finance Controller120.png */; };
+		1EDF24671D63C0E000993433 /* My Finance Controllerx58.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EDF24631D63C0E000993433 /* My Finance Controllerx58.png */; };
+		1EDF24681D63C0E000993433 /* My Finance Controllerx80.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EDF24641D63C0E000993433 /* My Finance Controllerx80.png */; };
+		1EDF24691D63C0E000993433 /* My Finance Controllerx180.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EDF24651D63C0E000993433 /* My Finance Controllerx180.png */; };
+		1EFD04F51D39B3D200FF6C56 /* TVCPresupuestoDetalle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD04F41D39B3D200FF6C56 /* TVCPresupuestoDetalle.swift */; };
+		1EFD04FA1D3AB77F00FF6C56 /* CDModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD04F81D3AB77F00FF6C56 /* CDModel.xcdatamodeld */; };
+		1EFD04FC1D3AB9AF00FF6C56 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD04FB1D3AB9AF00FF6C56 /* DataController.swift */; };
+		1EFD05041D3AD93700FF6C56 /* Presupuesto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD04FE1D3AD93700FF6C56 /* Presupuesto.swift */; };
+		1EFD05051D3AD93700FF6C56 /* Recibo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD04FF1D3AD93700FF6C56 /* Recibo+CoreDataProperties.swift */; };
+		1EFD05061D3AD93700FF6C56 /* Recibo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD05001D3AD93700FF6C56 /* Recibo.swift */; };
+		1EFD05071D3AD93700FF6C56 /* PresupuestoSeccion+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD05011D3AD93700FF6C56 /* PresupuestoSeccion+CoreDataProperties.swift */; };
+		1EFD05081D3AD93700FF6C56 /* PresupuestoSeccion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFD05021D3AD93700FF6C56 /* PresupuestoSeccion.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1E04B29C1D6B752800A0E294 /* JetAinMemSoft.001.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JetAinMemSoft.001.png; sourceTree = "<group>"; };
+		1E2FB4551D47E3E40005C700 /* SRecibo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRecibo.swift; path = "My Finance Controller/SRecibo.swift"; sourceTree = "<group>"; };
+		1E3340701D221EFE001AE9FB /* My Finance Controller.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Finance Controller.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E3340731D221EFE001AE9FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1E3340781D221EFE001AE9FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1E33407A1D221EFE001AE9FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1E33407D1D221EFE001AE9FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1E33407F1D221EFE001AE9FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1E39509E1D5BC11400F5578A /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		1E3C48991D6411FB00527508 /* My Finance Controller Lite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Finance Controller Lite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E3C489B1D641EF600527508 /* My Finance Controller Lite180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My Finance Controller Lite180.png"; sourceTree = "<group>"; };
+		1E3C489C1D641EF600527508 /* My Finance Controller Litex58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My Finance Controller Litex58.png"; sourceTree = "<group>"; };
+		1E3C489D1D641EF600527508 /* My Finance Controller Litex80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My Finance Controller Litex80.png"; sourceTree = "<group>"; };
+		1E3C489E1D641EF600527508 /* My Finance Controller Litex120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My Finance Controller Litex120.png"; sourceTree = "<group>"; };
+		1E5685C31D720C9600D79CC7 /* initialbudget.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = initialbudget.json; sourceTree = "<group>"; };
+		1E81CB091D5A77AB002CEC5F /* Verdana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Verdana.ttf; sourceTree = "<group>"; };
+		1EBCA64D1D2C32CE00055086 /* TVCPresupuestos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TVCPresupuestos.swift; sourceTree = "<group>"; };
+		1EBCA64F1D2C336500055086 /* TVCPresupuesto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TVCPresupuesto.swift; sourceTree = "<group>"; };
+		1EBCA6511D2C33A500055086 /* TVCCategoria.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TVCCategoria.swift; sourceTree = "<group>"; };
+		1ECD2F991D46D30900989691 /* VCRegistro.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCRegistro.swift; sourceTree = "<group>"; };
+		1ED318A21D3B3F0700EF0D34 /* SPresupuesto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SPresupuesto.swift; path = "My Finance Controller/SPresupuesto.swift"; sourceTree = "<group>"; };
+		1ED318A41D3B3F8F00EF0D34 /* CStructureModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CStructureModel.swift; path = "My Finance Controller/CStructureModel.swift"; sourceTree = "<group>"; };
+		1ED318A61D3B43B300EF0D34 /* SPresupuestoSeccion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SPresupuestoSeccion.swift; path = "My Finance Controller/SPresupuestoSeccion.swift"; sourceTree = "<group>"; };
+		1ED659C81D67BFC000BB311A /* CCGlobal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCGlobal.swift; sourceTree = "<group>"; };
+		1EDF24601D63B9FD00993433 /* Presupuesto+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Presupuesto+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1EDF24621D63C0E000993433 /* My Finance Controller120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My Finance Controller120.png"; sourceTree = "<group>"; };
+		1EDF24631D63C0E000993433 /* My Finance Controllerx58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My Finance Controllerx58.png"; sourceTree = "<group>"; };
+		1EDF24641D63C0E000993433 /* My Finance Controllerx80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My Finance Controllerx80.png"; sourceTree = "<group>"; };
+		1EDF24651D63C0E000993433 /* My Finance Controllerx180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My Finance Controllerx180.png"; sourceTree = "<group>"; };
+		1EFD04F41D39B3D200FF6C56 /* TVCPresupuestoDetalle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TVCPresupuestoDetalle.swift; sourceTree = "<group>"; };
+		1EFD04F91D3AB77F00FF6C56 /* CDModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CDModel.xcdatamodel; sourceTree = "<group>"; };
+		1EFD04FB1D3AB9AF00FF6C56 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataController.swift; path = "My Finance Controller/DataController.swift"; sourceTree = "<group>"; };
+		1EFD04FE1D3AD93700FF6C56 /* Presupuesto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Presupuesto.swift; sourceTree = "<group>"; };
+		1EFD04FF1D3AD93700FF6C56 /* Recibo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Recibo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1EFD05001D3AD93700FF6C56 /* Recibo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recibo.swift; sourceTree = "<group>"; };
+		1EFD05011D3AD93700FF6C56 /* PresupuestoSeccion+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PresupuestoSeccion+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1EFD05021D3AD93700FF6C56 /* PresupuestoSeccion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresupuestoSeccion.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1E33406D1D221EFE001AE9FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E3C488B1D6411FB00527508 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1E2FB4571D47E6760005C700 /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				1EFD04FB1D3AB9AF00FF6C56 /* DataController.swift */,
+				1EDF24601D63B9FD00993433 /* Presupuesto+CoreDataProperties.swift */,
+				1EFD04FE1D3AD93700FF6C56 /* Presupuesto.swift */,
+				1EFD04FF1D3AD93700FF6C56 /* Recibo+CoreDataProperties.swift */,
+				1EFD05001D3AD93700FF6C56 /* Recibo.swift */,
+				1EFD05011D3AD93700FF6C56 /* PresupuestoSeccion+CoreDataProperties.swift */,
+				1EFD05021D3AD93700FF6C56 /* PresupuestoSeccion.swift */,
+				1EFD04F81D3AB77F00FF6C56 /* CDModel.xcdatamodeld */,
+				1ED318A21D3B3F0700EF0D34 /* SPresupuesto.swift */,
+				1ED318A41D3B3F8F00EF0D34 /* CStructureModel.swift */,
+				1ED318A61D3B43B300EF0D34 /* SPresupuestoSeccion.swift */,
+				1E2FB4551D47E3E40005C700 /* SRecibo.swift */,
+				1E5685C31D720C9600D79CC7 /* initialbudget.json */,
+			);
+			name = "Core Data";
+			sourceTree = "<group>";
+		};
+		1E3340671D221EFE001AE9FB = {
+			isa = PBXGroup;
+			children = (
+				1EDF244F1D63918E00993433 /* images */,
+				1E81CB071D5A74DC002CEC5F /* Fonts */,
+				1E2FB4571D47E6760005C700 /* Core Data */,
+				1E3340721D221EFE001AE9FB /* My Finance Controller */,
+				1E3340711D221EFE001AE9FB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1E3340711D221EFE001AE9FB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1E3340701D221EFE001AE9FB /* My Finance Controller.app */,
+				1E3C48991D6411FB00527508 /* My Finance Controller Lite.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1E3340721D221EFE001AE9FB /* My Finance Controller */ = {
+			isa = PBXGroup;
+			children = (
+				1E3340731D221EFE001AE9FB /* AppDelegate.swift */,
+				1E39509E1D5BC11400F5578A /* UIColor.swift */,
+				1ED659C81D67BFC000BB311A /* CCGlobal.swift */,
+				1EBCA64D1D2C32CE00055086 /* TVCPresupuestos.swift */,
+				1EBCA64F1D2C336500055086 /* TVCPresupuesto.swift */,
+				1EBCA6511D2C33A500055086 /* TVCCategoria.swift */,
+				1EFD04F41D39B3D200FF6C56 /* TVCPresupuestoDetalle.swift */,
+				1ECD2F991D46D30900989691 /* VCRegistro.swift */,
+				1E3340771D221EFE001AE9FB /* Main.storyboard */,
+				1E33407A1D221EFE001AE9FB /* Assets.xcassets */,
+				1E33407C1D221EFE001AE9FB /* LaunchScreen.storyboard */,
+				1E33407F1D221EFE001AE9FB /* Info.plist */,
+			);
+			path = "My Finance Controller";
+			sourceTree = "<group>";
+		};
+		1E81CB071D5A74DC002CEC5F /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				1E81CB091D5A77AB002CEC5F /* Verdana.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
+		1EDF244F1D63918E00993433 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				1E04B29C1D6B752800A0E294 /* JetAinMemSoft.001.png */,
+				1E3C489B1D641EF600527508 /* My Finance Controller Lite180.png */,
+				1E3C489C1D641EF600527508 /* My Finance Controller Litex58.png */,
+				1E3C489D1D641EF600527508 /* My Finance Controller Litex80.png */,
+				1E3C489E1D641EF600527508 /* My Finance Controller Litex120.png */,
+				1EDF24621D63C0E000993433 /* My Finance Controller120.png */,
+				1EDF24631D63C0E000993433 /* My Finance Controllerx58.png */,
+				1EDF24641D63C0E000993433 /* My Finance Controllerx80.png */,
+				1EDF24651D63C0E000993433 /* My Finance Controllerx180.png */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1E33406F1D221EFE001AE9FB /* My Finance Controller */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1E3340821D221EFE001AE9FB /* Build configuration list for PBXNativeTarget "My Finance Controller" */;
+			buildPhases = (
+				1E33406C1D221EFE001AE9FB /* Sources */,
+				1E33406D1D221EFE001AE9FB /* Frameworks */,
+				1E33406E1D221EFE001AE9FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "My Finance Controller";
+			productName = "My Finance Controller";
+			productReference = 1E3340701D221EFE001AE9FB /* My Finance Controller.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1E3C48761D6411FB00527508 /* My Finance Controller Lite */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1E3C48961D6411FB00527508 /* Build configuration list for PBXNativeTarget "My Finance Controller Lite" */;
+			buildPhases = (
+				1E3C48771D6411FB00527508 /* Sources */,
+				1E3C488B1D6411FB00527508 /* Frameworks */,
+				1E3C488C1D6411FB00527508 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "My Finance Controller Lite";
+			productName = "My Finance Controller";
+			productReference = 1E3C48991D6411FB00527508 /* My Finance Controller Lite.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1E3340681D221EFE001AE9FB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "Américo Cantillo Gutiérrez";
+				TargetAttributes = {
+					1E33406F1D221EFE001AE9FB = {
+						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = DVSM299CEH;
+					};
+					1E3C48761D6411FB00527508 = {
+						DevelopmentTeam = DVSM299CEH;
+					};
+				};
+			};
+			buildConfigurationList = 1E33406B1D221EFE001AE9FB /* Build configuration list for PBXProject "My Finance Controller" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1E3340671D221EFE001AE9FB;
+			productRefGroup = 1E3340711D221EFE001AE9FB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1E33406F1D221EFE001AE9FB /* My Finance Controller */,
+				1E3C48761D6411FB00527508 /* My Finance Controller Lite */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1E33406E1D221EFE001AE9FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1E3C48A11D641EF600527508 /* My Finance Controller Litex80.png in Resources */,
+				1E5685C41D720C9600D79CC7 /* initialbudget.json in Resources */,
+				1E81CB0A1D5A77C3002CEC5F /* Verdana.ttf in Resources */,
+				1E33407E1D221EFE001AE9FB /* LaunchScreen.storyboard in Resources */,
+				1E3C48A21D641EF600527508 /* My Finance Controller Litex120.png in Resources */,
+				1E3C489F1D641EF600527508 /* My Finance Controller Lite180.png in Resources */,
+				1E3C48A01D641EF600527508 /* My Finance Controller Litex58.png in Resources */,
+				1E04B29D1D6B752800A0E294 /* JetAinMemSoft.001.png in Resources */,
+				1EDF24671D63C0E000993433 /* My Finance Controllerx58.png in Resources */,
+				1E33407B1D221EFE001AE9FB /* Assets.xcassets in Resources */,
+				1E3340791D221EFE001AE9FB /* Main.storyboard in Resources */,
+				1EDF24681D63C0E000993433 /* My Finance Controllerx80.png in Resources */,
+				1EDF24661D63C0E000993433 /* My Finance Controller120.png in Resources */,
+				1EDF24691D63C0E000993433 /* My Finance Controllerx180.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E3C488C1D6411FB00527508 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1E3C488D1D6411FB00527508 /* Verdana.ttf in Resources */,
+				1E3C488F1D6411FB00527508 /* LaunchScreen.storyboard in Resources */,
+				1E3C48901D6411FB00527508 /* My Finance Controllerx58.png in Resources */,
+				1E3C48911D6411FB00527508 /* Assets.xcassets in Resources */,
+				1E3C48921D6411FB00527508 /* Main.storyboard in Resources */,
+				1E5685C51D720C9600D79CC7 /* initialbudget.json in Resources */,
+				1E3C48931D6411FB00527508 /* My Finance Controllerx80.png in Resources */,
+				1E3C48941D6411FB00527508 /* My Finance Controller120.png in Resources */,
+				1E04B29E1D6B752800A0E294 /* JetAinMemSoft.001.png in Resources */,
+				1E3C48951D6411FB00527508 /* My Finance Controllerx180.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1E33406C1D221EFE001AE9FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1EFD05071D3AD93700FF6C56 /* PresupuestoSeccion+CoreDataProperties.swift in Sources */,
+				1EFD04FC1D3AB9AF00FF6C56 /* DataController.swift in Sources */,
+				1EFD05051D3AD93700FF6C56 /* Recibo+CoreDataProperties.swift in Sources */,
+				1ED318A51D3B3F8F00EF0D34 /* CStructureModel.swift in Sources */,
+				1ECD2F9A1D46D30900989691 /* VCRegistro.swift in Sources */,
+				1EFD05041D3AD93700FF6C56 /* Presupuesto.swift in Sources */,
+				1EBCA64E1D2C32CE00055086 /* TVCPresupuestos.swift in Sources */,
+				1EFD04F51D39B3D200FF6C56 /* TVCPresupuestoDetalle.swift in Sources */,
+				1ED659C91D67BFC000BB311A /* CCGlobal.swift in Sources */,
+				1ED318A31D3B3F0700EF0D34 /* SPresupuesto.swift in Sources */,
+				1EBCA6521D2C33A500055086 /* TVCCategoria.swift in Sources */,
+				1EDF24611D63B9FD00993433 /* Presupuesto+CoreDataProperties.swift in Sources */,
+				1E2FB4561D47E3E40005C700 /* SRecibo.swift in Sources */,
+				1ED318A71D3B43B300EF0D34 /* SPresupuestoSeccion.swift in Sources */,
+				1EFD05081D3AD93700FF6C56 /* PresupuestoSeccion.swift in Sources */,
+				1E39509F1D5BC11400F5578A /* UIColor.swift in Sources */,
+				1E3340741D221EFE001AE9FB /* AppDelegate.swift in Sources */,
+				1EFD04FA1D3AB77F00FF6C56 /* CDModel.xcdatamodeld in Sources */,
+				1EFD05061D3AD93700FF6C56 /* Recibo.swift in Sources */,
+				1EBCA6501D2C336500055086 /* TVCPresupuesto.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E3C48771D6411FB00527508 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1E3C48781D6411FB00527508 /* PresupuestoSeccion+CoreDataProperties.swift in Sources */,
+				1E3C48791D6411FB00527508 /* DataController.swift in Sources */,
+				1E3C487A1D6411FB00527508 /* Recibo+CoreDataProperties.swift in Sources */,
+				1E3C487B1D6411FB00527508 /* CStructureModel.swift in Sources */,
+				1E3C487C1D6411FB00527508 /* VCRegistro.swift in Sources */,
+				1E3C487D1D6411FB00527508 /* Presupuesto.swift in Sources */,
+				1E3C487E1D6411FB00527508 /* TVCPresupuestos.swift in Sources */,
+				1E3C487F1D6411FB00527508 /* TVCPresupuestoDetalle.swift in Sources */,
+				1ED659CA1D67BFC000BB311A /* CCGlobal.swift in Sources */,
+				1E3C48801D6411FB00527508 /* SPresupuesto.swift in Sources */,
+				1E3C48811D6411FB00527508 /* TVCCategoria.swift in Sources */,
+				1E3C48821D6411FB00527508 /* Presupuesto+CoreDataProperties.swift in Sources */,
+				1E3C48831D6411FB00527508 /* SRecibo.swift in Sources */,
+				1E3C48841D6411FB00527508 /* SPresupuestoSeccion.swift in Sources */,
+				1E3C48851D6411FB00527508 /* PresupuestoSeccion.swift in Sources */,
+				1E3C48861D6411FB00527508 /* UIColor.swift in Sources */,
+				1E3C48871D6411FB00527508 /* AppDelegate.swift in Sources */,
+				1E3C48881D6411FB00527508 /* CDModel.xcdatamodeld in Sources */,
+				1E3C48891D6411FB00527508 /* Recibo.swift in Sources */,
+				1E3C488A1D6411FB00527508 /* TVCPresupuesto.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		1E3340771D221EFE001AE9FB /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1E3340781D221EFE001AE9FB /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		1E33407C1D221EFE001AE9FB /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1E33407D1D221EFE001AE9FB /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1E3340801D221EFE001AE9FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1E3340811D221EFE001AE9FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1E3340831D221EFE001AE9FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "My Finance Controller/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				New_Setting = "";
+				"OTHER_SWIFT_FLAGS[arch=*]" = "\"-D\"\"COCOAPODS\" -DDEBUG -DFULL_VERSION";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jetainmemsoft.My-Finance-Controller";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1E3340841D221EFE001AE9FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "My Finance Controller/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				New_Setting = "";
+				OTHER_SWIFT_FLAGS = "";
+				"OTHER_SWIFT_FLAGS[arch=*]" = "\"-D\"\"COCOAPODS\" -DFULL_VERSION -DRELEASE";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jetainmemsoft.My-Finance-Controller";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		1E3C48971D6411FB00527508 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Lite";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				INFOPLIST_FILE = "$(SRCROOT)/My Finance Controller/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"OTHER_SWIFT_FLAGS[arch=*]" = "\"-D\"\"COCOAPODS\" -DDEBUG -DLITE_VERSION";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jetainmemsoft.My-Finance-Controller-Lite";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1E3C48981D6411FB00527508 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Lite";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				INFOPLIST_FILE = "$(SRCROOT)/My Finance Controller/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"OTHER_SWIFT_FLAGS[arch=*]" = "\"-D\"\"COCOAPODS\" -DLITE_VERSION -DRELEASE";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jetainmemsoft.My-Finance-Controller-Lite";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1E33406B1D221EFE001AE9FB /* Build configuration list for PBXProject "My Finance Controller" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E3340801D221EFE001AE9FB /* Debug */,
+				1E3340811D221EFE001AE9FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1E3340821D221EFE001AE9FB /* Build configuration list for PBXNativeTarget "My Finance Controller" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E3340831D221EFE001AE9FB /* Debug */,
+				1E3340841D221EFE001AE9FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1E3C48961D6411FB00527508 /* Build configuration list for PBXNativeTarget "My Finance Controller Lite" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E3C48971D6411FB00527508 /* Debug */,
+				1E3C48981D6411FB00527508 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1EFD04F81D3AB77F00FF6C56 /* CDModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1EFD04F91D3AB77F00FF6C56 /* CDModel.xcdatamodel */,
+			);
+			currentVersion = 1EFD04F91D3AB77F00FF6C56 /* CDModel.xcdatamodel */;
+			path = CDModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 1E3340681D221EFE001AE9FB /* Project object */;
+}

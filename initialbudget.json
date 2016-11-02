@@ -1,0 +1,73 @@
+{
+    "Presupuesto": [{
+                    "descripcion": "Budget Demo",
+                    "fechaInicio": "01/08/2016",
+                    "fechaFinal": "31/12/2016",
+                    "valor": 1450,
+                    "umbral": 85,
+                    "ingresos": 5.36,
+                    "ejecutado": 250.06,
+                    "activo": 1,
+                    "preservar": 1,
+                    "secciones": [
+                                  {
+                                  "descripcion": "Section of Home",
+                                  "totalIngresos": 0,
+                                  "totalEgresos": 124.9,
+                                  "recibos": [
+                                              {
+                                              "descripcion": "Bill water",
+                                              "fecha": "15/08/2016",
+                                              "tipo": 1,
+                                              "valor": 74.9
+                                              },
+                                              {
+                                              "descripcion": "Bill internet",
+                                              "fecha": "20/08/2016",
+                                              "tipo": 1,
+                                              "valor": 50
+                                              }
+                                              ]
+                                  },
+                                  {
+                                  "descripcion": "Section of Work",
+                                  "totalIngresos": 0,
+                                  "totalEgresos": 50.36,
+                                  "recibos": [
+                                              {
+                                              "descripcion": "Lunches",
+                                              "fecha": "25/08/2016",
+                                              "tipo": 1,
+                                              "valor": 35
+                                              },
+                                              {
+                                              "descripcion": "Meals",
+                                              "fecha": "14/08/2016",
+                                              "tipo": 1,
+                                              "valor": 15.36
+                                              }
+                                              ]
+                                  },
+                                  {
+                                  "descripcion": "Section of Banks",
+                                  "totalIngresos": 5.36,
+                                  "totalEgresos": 74.8,
+                                  "recibos": [
+                                              {
+                                              "descripcion": "Credit Card My Bank",
+                                              "fecha": "29/08/2016",
+                                              "tipo": 1,
+                                              "valor": 74.8
+                                              },
+                                              {
+                                              "descripcion": "Financial return My Bank",
+                                              "fecha": "30/08/2016",
+                                              "tipo": 0,
+                                              "valor": 5.36
+                                              }
+                                              ]
+                                  }
+                                  ]
+                    }
+                    ]
+}

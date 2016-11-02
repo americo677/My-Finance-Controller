@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15G31" minimumToolsVersion="Xcode 7.0">
+    <entity name="Presupuesto" representedClassName="Presupuesto" syncable="YES">
+        <attribute name="activo" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <attribute name="descripcion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ejecutado" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="fechaFinal" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="fechaInicio" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="ingresos" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="preservar" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <attribute name="umbral" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="valor" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="secciones" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PresupuestoSeccion" inverseName="presupuesto" inverseEntity="PresupuestoSeccion" syncable="YES"/>
+    </entity>
+    <entity name="PresupuestoSeccion" representedClassName="PresupuestoSeccion" syncable="YES">
+        <attribute name="descripcion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="totalEgresos" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="totalIngresos" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="presupuesto" maxCount="1" deletionRule="Nullify" destinationEntity="Presupuesto" inverseName="secciones" inverseEntity="Presupuesto" syncable="YES"/>
+        <relationship name="recibos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Recibo" inverseName="seccion" inverseEntity="Recibo" syncable="YES"/>
+    </entity>
+    <entity name="Recibo" representedClassName="Recibo" syncable="YES">
+        <attribute name="descripcion" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fecha" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="tipo" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="valor" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="seccion" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PresupuestoSeccion" inverseName="recibos" inverseEntity="PresupuestoSeccion" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Presupuesto" positionX="-63" positionY="-18" width="128" height="195"/>
+        <element name="PresupuestoSeccion" positionX="-54" positionY="36" width="128" height="120"/>
+        <element name="Recibo" positionX="-36" positionY="72" width="128" height="120"/>
+    </elements>
+</model>

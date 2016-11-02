@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>My Finance Controller Lite.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>My Finance Controller.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>1E33406F1D221EFE001AE9FB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1E3C48761D6411FB00527508</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1E6540481D5D1B8400977D61</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1E6540611D5D378700977D61</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1E6540781D5D463000977D61</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>
