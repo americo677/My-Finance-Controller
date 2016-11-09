@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="detailButton" indentationWidth="10" reuseIdentifier="presupuestoDetalleCell" rowHeight="58" id="i7t-Y9-oLZ" customClass="PresupuestoDetalleCell" customModule="My_Finance_Controller" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="58"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="i7t-Y9-oLZ" id="C4p-hD-ALK">
+                <rect key="frame" x="0.0" y="0.0" width="328" height="57"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Descripcion" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hzq-PR-seW">
+                        <rect key="frame" x="2" y="0.0" width="295" height="35"/>
+                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                        <color key="textColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fecha" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5X-B9-36A">
+                        <rect key="frame" x="2" y="36" width="80" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="9ry-oB-6Hp"/>
+                            <constraint firstAttribute="width" constant="80" id="gxa-jf-gDc"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Monto" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TZK-Hn-Tc3">
+                        <rect key="frame" x="80" y="35" width="200" height="22"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailingMargin" secondItem="Hzq-PR-seW" secondAttribute="trailing" constant="23" id="DFO-QE-frW"/>
+                    <constraint firstItem="B5X-B9-36A" firstAttribute="top" secondItem="Hzq-PR-seW" secondAttribute="bottom" constant="1" id="QGo-Tr-gaz"/>
+                    <constraint firstItem="B5X-B9-36A" firstAttribute="baseline" secondItem="TZK-Hn-Tc3" secondAttribute="baseline" id="RO1-gJ-cco"/>
+                    <constraint firstItem="Hzq-PR-seW" firstAttribute="leading" secondItem="B5X-B9-36A" secondAttribute="leading" id="VGe-Eq-cJu"/>
+                    <constraint firstItem="TZK-Hn-Tc3" firstAttribute="leading" secondItem="C4p-hD-ALK" secondAttribute="leadingMargin" constant="72" id="Xg4-oO-WiT"/>
+                    <constraint firstItem="Hzq-PR-seW" firstAttribute="leading" secondItem="C4p-hD-ALK" secondAttribute="leadingMargin" constant="-6" id="cew-1h-H8W"/>
+                    <constraint firstItem="Hzq-PR-seW" firstAttribute="top" secondItem="C4p-hD-ALK" secondAttribute="top" id="cn5-B9-MGT"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="TZK-Hn-Tc3" secondAttribute="trailing" constant="40" id="gai-dv-8u7"/>
+                    <constraint firstItem="B5X-B9-36A" firstAttribute="firstBaseline" secondItem="TZK-Hn-Tc3" secondAttribute="firstBaseline" id="t0A-Di-xU6"/>
+                    <constraint firstAttribute="bottom" secondItem="B5X-B9-36A" secondAttribute="bottom" id="ze6-eM-B9x"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="tintColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <connections>
+                <outlet property="descripcion" destination="Hzq-PR-seW" id="td1-rk-u9i"/>
+                <outlet property="fecha" destination="B5X-B9-36A" id="D2n-4m-sv2"/>
+                <outlet property="monto" destination="TZK-Hn-Tc3" id="ZxU-X3-78e"/>
+            </connections>
+            <point key="canvasLocation" x="50.5" y="61"/>
+        </tableViewCell>
+    </objects>
+</document>
