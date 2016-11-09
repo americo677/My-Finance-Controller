@@ -58,15 +58,90 @@ class TVCCategoria: UITableViewController {
     
     var strPresupuestoNombre: String?
     
+    func sendToChooseBudget(sender: AnyObject?) {
+                self.performSegue(withIdentifier: "segueCopySections", sender: sender)
+    }
+    
+    func btnActionOnTouchInsideup(_ sender: AnyObject) {
+        
+        let alertController = UIAlertController(title: self.strAppTitle, message: "You can copy sections from another budget", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            print(action)
+        }
+        
+        //alertController.addAction(cancelAction)
+        
+        //let destroyAction = UIAlertAction(title: "Destroy", style: .Destructive) { (action) in
+        //    print(action)
+        
+        //}
+        
+        let oneAction = UIAlertAction(title: "Choose", style: .default) { (_) in
+            self.sendToChooseBudget(sender: self)
+        }
+        
+        alertController.addAction(oneAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true) {
+        }
+        
+    }
+    
+    func loadPreferences() {
+        
+        // inicializar los placeholder de los UITextField que lo requieran
+        //txtMonto.placeholder  = "Monto del préstamo"
+        
+        // Para UITextField de entrada numérica
+        //self.txtPresupuesto.keyboardType = .decimalPad
+        
+        let rightButton = UIBarButtonItem(title: "Add", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.addCategoria(_:)))
+        
+        let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: self, action: nil)
+        
+        
+        // Bar title text color
+        //let shadow = NSShadow()
+        //shadow.shadowColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        //shadow.shadowOffset = CGSize(0, 1)
+        
+        let color = UIColor.white
+        
+        let titleFont : UIFont = UIFont(name: CCGlobal().FONT_NAME_TITLE_NAVIGATION_BAR, size: 14)!
+        
+        let attributes = [
+            NSForegroundColorAttributeName : color,
+            //NSShadowAttributeName : shadow,
+            NSFontAttributeName : titleFont
+        ]
+        
+        
+        rightButton.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        
+        backButton.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        
+        
+        self.navigationItem.rightBarButtonItem = rightButton
+        
+        
+        self.navigationItem.backBarButtonItem = backButton
+        
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        loadPreferences()
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
+        /*
         let sublayer = CALayer.init()
         sublayer.backgroundColor = UIColor.customLightGrayColor().cgColor
         sublayer.shadowOffset = CGSize(width: 0, height: 3)
@@ -74,8 +149,17 @@ class TVCCategoria: UITableViewController {
         sublayer.shadowOpacity = 0.8;
         sublayer.frame = CGRect(x: 0, y: 0, width: 420, height: 4200)
         self.view.layer.addSublayer(sublayer)
+        */
         
         loadSections()
+        
+        #if FULL_VERSION
+            self.navigationController?.isToolbarHidden = false
+            var items = [AnyObject]()
+            items.append(UIBarButtonItem(title: "Copy sections", style: .plain, target: self,action: #selector(self.btnActionOnTouchInsideup)))
+            self.toolbarItems = items as? [UIBarButtonItem]
+        #endif
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -253,12 +337,6 @@ class TVCCategoria: UITableViewController {
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return self.presupuesto?.value(forKey: smModelo.smPresupuesto.colDescripcion) as? String
@@ -354,16 +432,20 @@ class TVCCategoria: UITableViewController {
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    /*
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-            if segue.identifier == "segueMasterCuotas" {
-                let vcCategoria: TVCCategoria = segue.destinationViewController as! TVCCategoria
+            if segue.identifier == "segueCopySections" {
+                let vcCopySections: TVCCopySections = segue.destination as! TVCCopySections
                 
-                vcMasterCuotas.cppPlan = cppPlan!
+                vcCopySections.presupuesto = self.presupuesto
+                
             }
     }
-    */
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
 
 }
