@@ -9,12 +9,26 @@
 import UIKit
 import CoreData
 
-class TVCPresupuestos: UITableViewController {
+//class TVCPresupuestos: UITableViewController {
+
+
+class TVCPresupuestos: UIViewController, UITableViewDelegate, UITableViewDataSource {
+
+    @IBOutlet var tableView: UITableView!
     
-    @IBOutlet var tvPresupuestos: UITableView!
+
+    //@IBOutlet weak var btnBudget: UIBarButtonItem!
+
+    class cPresupuesto {
+        var titulo: String?
+        var rangoFechas: String?
+        var porcentaje: String?
+        var valor: String?
+        var valorIngresos: String?
+        var valorEgresos: String?
+    }
     
-    @IBOutlet weak var btnBudget: UIBarButtonItem!
-    
+    var oPresupuesto = cPresupuesto()
     
     let preferencias = UserDefaults.standard
 
@@ -35,8 +49,10 @@ class TVCPresupuestos: UITableViewController {
     let strAppTitle = "My Finance Controller"
     
     var intSelectedIndex : Int = -1
+        
+        
     
-    let MAX_ROW_HEIGHT: CGFloat = 93
+    //let MAX_ROW_HEIGHT: CGFloat = 93
     
     let formatterMon : NumberFormatter = NumberFormatter()
     let formatterFlt : NumberFormatter = NumberFormatter()
@@ -76,7 +92,7 @@ class TVCPresupuestos: UITableViewController {
     }
     
     func initTableViewRowHeight() {
-        self.tvPresupuestos.rowHeight = MAX_ROW_HEIGHT
+        self.tableView.rowHeight = CCGlobal().MAX_ROW_HEIGHT
         //self.tvPresupuestos.frame.size.width = 500
     }
     
@@ -253,12 +269,124 @@ class TVCPresupuestos: UITableViewController {
         return recibo!
     }
     
+    
+    func btnBudgetOnTouchInsideUp(_ sender: UIBarButtonItem) {
+        self.performSegue(withIdentifier: "segueNewPresupuesto", sender: sender)
+    }
+    
+    func btnEditOnTouchInsideUp(_ sender: UIBarButtonItem) {
+        
+        if self.tableView.isEditing {
+            self.editButtonItem.title = "Edit"
+            self.tableView.setEditing(false, animated: true)
+        } else {
+            self.editButtonItem.title = "Done"
+            self.tableView.setEditing(true, animated: true)
+        }
+    }
+    
+    
+    // MARK: - Procedimientos para carga de la vista
+    
+    func loadPreferences() {
+        
+        // inicializar los placeholder de los UITextField que lo requieran
+        //txtMonto.placeholder  = "Monto del préstamo"
+        
+        // Para UITextField de entrada numérica
+        //self.txtMonto.keyboardType = .decimalPad
+        
+        // Cambia el color de la navigation bar
+        self.navigationController?.navigationBar.barTintColor = UIColor.gray
+        
+        // Cambia el color del texto de la navigation bar
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white,  NSFontAttributeName: UIFont(name: CCGlobal().FONT_NAME_TITLE_NAVIGATION_BAR, size: 17)!]
+        
+        // para el color de los textos de los buttonItem
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        
+        //let leftButton = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.plain, target: self, action: nil)
+        
+        //#selector(self.btnInfoOnTouchInsideUp(_:)
+        
+        
+        let rightButton = UIBarButtonItem(title: "Budget", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.btnBudgetOnTouchInsideUp(_:)))
+        
+        let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: self, action: nil)
+        
+        
+        // Bar title text color
+        //let shadow = NSShadow()
+        //shadow.shadowColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        //shadow.shadowOffset = CGSize(0, 1)
+        
+        let color = UIColor.white
+        
+        let titleFont : UIFont = UIFont(name: CCGlobal().FONT_NAME_TITLE_NAVIGATION_BAR, size: 14)!
+        
+        let attributes = [
+            NSForegroundColorAttributeName : color,
+            //NSShadowAttributeName : shadow,
+            NSFontAttributeName : titleFont
+        ]
+        
+        
+        //leftButton.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        self.editButtonItem.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        
+        self.editButtonItem.action =  #selector(self.btnEditOnTouchInsideUp(_:))
+        
+        rightButton.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        
+        backButton.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        
+        
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
+        
+        self.navigationItem.rightBarButtonItem = rightButton
+        
+        
+        self.navigationItem.backBarButtonItem = backButton
+        
+    }
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.backBarButtonItem?.title = "" // = backItem
+        //self.navigationItem.backBarButtonItem?.title = "" // = backItem
         
-        tvPresupuestos.allowsMultipleSelectionDuringEditing = false
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        
+        let identifier = "presupuestoCell"
+        //let nib = UINib(nibName: "PresupuestoCell", bundle: nil)
+        //self.tableView.register(nib, forCellReuseIdentifier: identifier)
+        
+        
+        //self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: identifier)
+
+        //self.tvPresupuestos.register(CustomTableViewCell.self, forCellReuseIdentifier: identifier)
+        
+        self.loadPreferences()
+        
+        
+        //self.tvPresupuestos.register(UITableViewCell
+            
+            //tableView.registerNib(UINib(nibName: "NameInput", bundle: nil), forCellReuseIdentifier: "Cell")
+        
+        let myBundle = Bundle(for: TVCPresupuestos.self)
+        
+        let nib = UINib(nibName: "PresupuestoCell", bundle: myBundle)
+
+            
+        //self.tvPresupuestos.register(nib, forCellReuseIdentifier: "CustomTableViewCell")
+        //self.tableView.register(PresupuestoCell.classForCoder(), )
+        self.tableView.register(nib, forCellReuseIdentifier: identifier)
+
+
+        
+        self.tableView.allowsMultipleSelectionDuringEditing = false
         
         //let databasePath = getPath("CDModel.sqlite")
         //print("Ruta de la bd: \(databasePath)")
@@ -267,6 +395,7 @@ class TVCPresupuestos: UITableViewController {
         
         self.initTableViewRowHeight()
         
+        /*
         let sublayer = CALayer.init()
         sublayer.backgroundColor = UIColor.customLightGrayColor().cgColor
         sublayer.shadowOffset = CGSize(width: 0, height: 3)
@@ -274,11 +403,8 @@ class TVCPresupuestos: UITableViewController {
         sublayer.shadowOpacity = 0.8;
         sublayer.frame = CGRect(x: 0, y: 0, width: 420, height: 42000)
         self.view.layer.addSublayer(sublayer)
+        */
         
-        tvPresupuestos.delegate = self
-        tvPresupuestos.dataSource = self
-        
-        tvPresupuestos.allowsSelectionDuringEditing = true
         
         let fltExecTimes = preferencias.float(forKey: prefExecTimes)
         
@@ -304,198 +430,99 @@ class TVCPresupuestos: UITableViewController {
         #endif
         
         // Uncomment the following line to preserve selection between presentations
-        self.clearsSelectionOnViewWillAppear = false
+        //self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        self.navigationItem.leftBarButtonItem = self.editButtonItem
+        //self.navigationItem.leftBarButtonItem = self.editButtonItem
         
         //self.navigationItem.leftBarButtonItem?.action = #selector(self.setEnableDisableButton)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         self.fetchPresupuestos()
         
         #if LITE_VERSION
             if self.presupuestos.count < CCGlobal().MAX_BUDGETS_LITE_VERSION {
-                self.btnBudget.enabled = true
+                //self.btnBudget.enabled = true
+                self.navigationItem.rightBarButtonItem?.isEnabled = true
             } else if self.presupuestos.count == CCGlobal().MAX_BUDGETS_LITE_VERSION {
-                self.btnBudget.enabled = false
+                //self.btnBudget.enabled = false
+                self.navigationItem.rightBarButtonItem?.isEnabled = false
             } else {
-                self.btnBudget.enabled = false
+                //self.btnBudget.enabled = false
+                self.navigationItem.rightBarButtonItem?.isEnabled = false
                 self.showCustomWarningAlert("This is the demo version.  To enjoy the full version of \(self.strAppTitle) we invite you to obtain the full version.  Thank you!.", toFocus: nil)
             }
         #endif
 
         #if FULL_VERSION
-            self.btnBudget.isEnabled = true
+            //self.btnBudget.isEnabled = true
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
         #endif
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.tvPresupuestos.deselectRow(at: indexSelected, animated: true)
-        self.tvPresupuestos.reloadData()
+        self.tableView.deselectRow(at: indexSelected, animated: true)
+        self.tableView.reloadData()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     // MARK: - Table view data source
 
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    //override
+        
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return strTituloLista
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    private func tableView(tableView:UITableView!, heightForRowAtIndexPath indexPath:NSIndexPath) -> CGFloat {
+        return 44 //CCGlobal().MAX_ROW_HEIGHT
+    }
+    
+    //override
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    //override
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         //return 1
         return self.presupuestos.count
     }
     
-    // MARK: - Celda personalizada
-    func customTableView(_ ctableView: UITableView, cindexPath: IndexPath, cpresupuesto: Presupuesto, caccessoryType: UITableViewCellAccessoryType) -> UITableViewCell {
-
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: cindexPath)
-        
-        // Para evitar el re-writting de los labels personalizados
-        for cellView in cell.contentView.subviews {
-            cellView.removeFromSuperview()
-        }
-        
-        //let labelTitle     : UILabel = UILabel(frame: CGRectMake(0.0, 0.0, 377.0, 35.0))
-        let labelTitle     : UILabel = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: 339.0, height: 35.0))
-        labelTitle.lineBreakMode = .byTruncatingTail
-        labelTitle.numberOfLines = 2
-        
-        //let labelDateRange : UILabel = UILabel(frame: CGRectMake(0.0,  35.0, 377.0, 18.0))
-        
-        let labelDateRange : UILabel = UILabel(frame: CGRect(x: 0.0,  y: 35.0, width: 339.0, height: 18.0))
-
-        let labelPorcentaje: UILabel = UILabel(frame: CGRect(x: 0.0, y: 53.0,  width: 78.0, height: 20.0))
-        
-        let labelPresupuesto: UILabel = UILabel(frame: CGRect(x: 0.0, y: 68.0, width: 100.0, height: 25.0))
-        let labelIngresos   : UILabel = UILabel(frame: CGRect(x: 112.0, y: 68.0, width: 100.0, height: 25.0))
-        let labelEgresos    : UILabel = UILabel(frame: CGRect(x: 237.0, y: 68.0, width: 100.0, height: 25.0))
-        
-        let douPresupuesto = cpresupuesto.value(forKey: smModelo.smPresupuesto.colValor) as! Double
-        
-        let douIngresos = cpresupuesto.value(forKey: smModelo.smPresupuesto.colIngresos) as! Double
-        
-        let douEjecutado = cpresupuesto.value(forKey: smModelo.smPresupuesto.colEjecutado) as! Double
-        
-        let douUmbral = cpresupuesto.value(forKey: smModelo.smPresupuesto.colUmbral) as! Double
-        
-        let porcentaje = (douEjecutado - douIngresos) / douPresupuesto * 100
-        
-        let strTitulo      = cpresupuesto.value(forKey: smModelo.smPresupuesto.colDescripcion) as! String
-        
-        let strDateRange   = "\(dateFormatter.string(from: cpresupuesto.fechaInicio! as Date)) - \(dateFormatter.string(from: cpresupuesto.fechaFinal! as Date))"
-        let strPresupuesto = formatterMon.string(from: NSNumber.init(value: douPresupuesto))!
-        let strIngreso     = formatterMon.string(from: NSNumber.init(value: douIngresos))!
-        let strEjecutado   = formatterMon.string(from: NSNumber.init(value: douEjecutado))!
-        
-        let fontName =  "Verdana-Bold"
-        let fontNameNumeric = "Verdana"
-        
-        //print("Presupuesto: \(strTitulo)")
-        //print("Porcentaje: \(porcentaje)")
-        //print("Umbral: \(douUmbral)")
-        
-        cell.textLabel?.text = ""
-        cell.detailTextLabel?.text = ""
-        
-        labelTitle.text = "  " + strTitulo
-        labelTitle.font = UIFont(name: fontName, size: 13)
-        labelTitle.textColor = UIColor.black
-        labelTitle.tag = cindexPath.row
-        labelTitle.backgroundColor = UIColor.gray
-        cell.contentView.addSubview(labelTitle)
-        
-        labelDateRange.text = "  " + strDateRange
-        labelDateRange.font = UIFont(name: fontNameNumeric, size: 11)
-        labelDateRange.textColor = UIColor.black
-        labelDateRange.tag = cindexPath.row
-        labelDateRange.backgroundColor = UIColor.gray
-        cell.contentView.addSubview(labelDateRange)
-        
-        
-        labelPorcentaje.text = "  At " + formatterFlt.string(from: NSNumber.init(value: porcentaje))! + "%"
-        labelPorcentaje.font =  UIFont(name: fontName, size: 12)
-        labelPorcentaje.textColor = UIColor.blue
-        labelPorcentaje.tag = cindexPath.row
-        labelPorcentaje.textAlignment = .left
-        labelPorcentaje.frame.size.height = 15
-
-        let backgroundView = UIView()
-        if douUmbral > 0 {
-            if porcentaje >= douUmbral && porcentaje < 100 {
-                labelPorcentaje.backgroundColor = UIColor.customLightYellowColor()
-                labelPorcentaje.textColor = UIColor.black
-                labelPorcentaje.font = UIFont.boldSystemFont(ofSize: 12)
-                backgroundView.backgroundColor = UIColor.customLightYellowColor()
-            } else if porcentaje > 100 {
-                labelPorcentaje.backgroundColor = UIColor.customLightRedColor()
-                labelPorcentaje.textColor = UIColor.black
-                labelPorcentaje.font = UIFont.boldSystemFont(ofSize: 12)
-                backgroundView.backgroundColor = UIColor.customLightRedColor()
-            } else {
-                labelPorcentaje.backgroundColor = UIColor.customLightGreenColor()
-                labelPorcentaje.textColor = UIColor.black
-                labelPorcentaje.font = UIFont.boldSystemFont(ofSize: 12)
-                backgroundView.backgroundColor = UIColor.customLightGreenColor()
-            }
-        }
-        cell.selectedBackgroundView = backgroundView
-        cell.contentView.addSubview(labelPorcentaje)
-
-        labelPresupuesto.text = strPresupuesto
-        labelPresupuesto.font =  UIFont(name: fontNameNumeric, size: 11)
-        labelPresupuesto.textColor = UIColor.black
-        labelPresupuesto.tag = cindexPath.row
-        labelPresupuesto.textAlignment = .right
-        //labelPresupuesto.backgroundColor = UIColor.customBlueColor()
-        cell.contentView.addSubview(labelPresupuesto)
-        
-        labelIngresos.text = String(format: "\(strIngreso)")
-        labelIngresos.font = UIFont(name: fontNameNumeric, size: 11)
-        labelIngresos.textColor = UIColor.blue
-        labelIngresos.tag = cindexPath.row
-        labelIngresos.textAlignment = .right
-        //labelIngresos.backgroundColor = UIColor.customLightYellowColor()
-        cell.contentView.addSubview(labelIngresos)
-        
-        labelEgresos.text = String(format: "\(strEjecutado)")
-        labelEgresos.font = UIFont(name: fontNameNumeric, size: 11)
-        labelEgresos.textColor = UIColor.red
-        labelEgresos.tag = cindexPath.row
-        labelEgresos.textAlignment = .right
-        cell.contentView.addSubview(labelEgresos)
-        
-        cell.accessoryType = caccessoryType
-
-        return cell
-
-    }
-    
     /*
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
     }
- 
     */
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       
-        //let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-        // Configure the cell...
-        var cell: UITableViewCell?
+    /*
         
+    private func tableView(_ tableView: UITableView, willDisplay cell: CustomTableViewCell, forRowAt indexPath: IndexPath) {
+        
+        cell.tituloPresupuesto.text = self.presupuetoCell.titulo
+        cell.tituloPresupuesto.tag = indexPath.row
+        
+        cell.rangoFechas.text = self.presupuetoCell.rangoFechas
+        cell.rangoFechas.tag = indexPath.row
+        
+        cell.porcentaje.text = self.presupuetoCell.porcentaje
+        cell.porcentaje.tag = indexPath.row
+        
+        cell.valorPresupuesto.text = self.presupuetoCell.valor
+        cell.valorPresupuesto.tag = indexPath.row
+        
+        cell.valorIngresos.text = self.presupuetoCell.valorIngresos
+        cell.valorIngresos.tag = indexPath.row
+        
+        cell.valorEgresos.text = self.presupuetoCell.valorEgresos
+        cell.valorEgresos.tag = indexPath.row
+
+        
+        
+        /*
         if self.presupuestos.count > 0 {
             self.presupuesto = self.presupuestos[indexPath.row] as? Presupuesto
             
@@ -507,34 +534,113 @@ class TVCPresupuestos: UITableViewController {
             
         } else {
             cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath)
-                    
-        }
-        return cell!
-    }
-    
-
-    /*
-    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-    }
-    */
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.isEditing {
-            //showCustomWarningAlert("Has seleccionado la row: \(indexPath.row) en modo de edición", toFocus: nil)
             
-            self.intSelectedIndex = indexPath.row
-            self.toolbarItems?.first?.isEnabled = true
+        }
+        */
+    }
+ */
 
-            self.performSegue(withIdentifier: "segueNewPresupuesto", sender: self)
-        } else {
-            self.intSelectedIndex = indexPath.row
-            self.performSegue(withIdentifier: "segueDetalle", sender: self)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+       
+        let identifier = "presupuestoCell"
+        
+        let cell: PresupuestoCell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! PresupuestoCell
+        
+        if self.presupuestos.count > 0 {
+            self.presupuesto = self.presupuestos[indexPath.row] as? Presupuesto
+            
+            if self.presupuesto?.descripcion! != nil {
+                //print("pathIndex.row(\(indexPath.row)): \(self.presupuesto!)")
+ 
+                self.oPresupuesto = cPresupuesto()
+                
+                // Para evitar el re-writting de los labels personalizados
+                //for cellView in (cell.contentView.subviews) {
+                //    cellView.removeFromSuperview()
+                //}
+                
+                let strTitulo = (self.presupuesto?.descripcion)! as String
+                
+                self.oPresupuesto.titulo = strTitulo
+                
+                
+                cell.titulo?.text = strTitulo
+                cell.titulo?.tag = indexPath.row
+                
+                //print("Titulo del presupuesto (on cellForRowAt): \(cell.titulo?.text!)")
+                
+                let strDateRange   = "\(dateFormatter.string(from: ((self.presupuesto?.fechaInicio)! as Date))) - \(dateFormatter.string(from: ((self.presupuesto?.fechaFinal)! as Date)))"
+                
+                
+                self.oPresupuesto.rangoFechas = strDateRange
+                
+                cell.rangoFechas?.text = strDateRange
+                cell.rangoFechas?.tag = indexPath.row
+                
+                
+                let douPresupuesto = (self.presupuesto?.value(forKey: smModelo.smPresupuesto.colValor) as! Double)
+                
+                let douIngresos = (self.presupuesto?.value(forKey: smModelo.smPresupuesto.colIngresos) as! Double)
+                
+                let douEjecutado = (self.presupuesto?.value(forKey: smModelo.smPresupuesto.colEjecutado) as! Double)
+                
+                let douUmbral = (self.presupuesto?.value(forKey: smModelo.smPresupuesto.colUmbral) as! Double)
+                
+                let porcentaje = (douEjecutado - douIngresos) / douPresupuesto * 100
+                
+                let strPresupuesto = formatterMon.string(from: NSNumber.init(value: douPresupuesto))!
+                
+                let strIngreso     = formatterMon.string(from: NSNumber.init(value: douIngresos))!
+                
+                let strEjecutado   = formatterMon.string(from: NSNumber.init(value: douEjecutado))!
+                
+                self.oPresupuesto.porcentaje = "  At \(formatterFlt.string(from: NSNumber.init(value: porcentaje))!)%"
+                
+                cell.porcentaje?.text = "  At " + formatterFlt.string(from: NSNumber.init(value: porcentaje))! + "%"
+                cell.porcentaje?.tag = indexPath.row
+                
+                
+                let backgroundView = UIView()
+                
+                if douUmbral > 0 {
+                    if porcentaje >= douUmbral && porcentaje < 100 {
+                        cell.porcentaje?.backgroundColor = UIColor.customLightYellowColor()
+                        cell.porcentaje?.textColor = UIColor.black
+                        //labelPorcentaje.font = UIFont.boldSystemFont(ofSize: 11)
+                        backgroundView.backgroundColor = UIColor.customLightYellowColor()
+                    } else if porcentaje > 100 {
+                        cell.porcentaje?.backgroundColor = UIColor.customLightRedColor()
+                        cell.porcentaje?.textColor = UIColor.black
+                        //labelPorcentaje.font = UIFont.boldSystemFont(ofSize: 11)
+                        backgroundView.backgroundColor = UIColor.customLightRedColor()
+                    } else {
+                        cell.porcentaje?.backgroundColor = UIColor.customLightGreenColor()
+                        cell.porcentaje?.textColor = UIColor.black
+                        //labelPorcentaje.font = UIFont.boldSystemFont(ofSize: 11)
+                        backgroundView.backgroundColor = UIColor.customLightGreenColor()
+                    }
+                }
+                
+                cell.selectedBackgroundView = backgroundView
+                
+                self.oPresupuesto.valor = strPresupuesto
+                cell.valorPresupuesto?.text = strPresupuesto
+                cell.valorPresupuesto?.tag = indexPath.row
+                
+                self.oPresupuesto.valorIngresos = strIngreso
+                cell.valorIngresos?.text = String(format: "\(strIngreso)")
+                cell.valorIngresos?.tag = indexPath.row
+                
+                self.oPresupuesto.valorEgresos = strEjecutado
+                cell.valorEgresos?.text = String(format: "\(strEjecutado)")
+                cell.valorEgresos?.tag = indexPath.row
+                
+            }
         }
         
-        indexSelected = indexPath
+        return cell
     }
     
-
     // MARK: - Alerta personalizada
     func showCustomWarningAlert(_ strMensaje: String, toFocus: UITextField?) {
         let alertController = UIAlertController(title: strAppTitle, message:
@@ -554,17 +660,7 @@ class TVCPresupuestos: UITableViewController {
         
     }
 
-    /*
-    override func tableView(tableView: UITableView,  accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
-        
-        self.intSelectedIndex = indexPath.row
-        
-        self.performSegueWithIdentifier("segueDetalle", sender: self)
-
-    }
-    */
-    
-    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         // Estilo checkbox - No repinta el background de los label
         //return UITableViewCellEditingStyle(rawValue: 3)!
         // Estilo sin imagen - permite eliminación
@@ -578,13 +674,13 @@ class TVCPresupuestos: UITableViewController {
 
 
     // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
 
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
             
@@ -621,8 +717,21 @@ class TVCPresupuestos: UITableViewController {
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
             
-        }    
+        }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.isEditing {
+            self.intSelectedIndex = indexPath.row
+            self.performSegue(withIdentifier: "segueNewPresupuesto", sender: self)
+        } else {
+            self.intSelectedIndex = indexPath.row
+            self.performSegue(withIdentifier: "segueDetalle", sender: self)
+        }
+        
+        indexSelected = indexPath
+    }
+    
 
     /*
     // Override to support rearranging the table view.
@@ -685,4 +794,11 @@ class TVCPresupuestos: UITableViewController {
             vDetail.moc = self.moc
         }
     }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
 }
