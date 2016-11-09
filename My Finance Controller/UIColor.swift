@@ -10,6 +10,14 @@ import Foundation
 import UIKit
 
 extension UIColor {
+    class func customDarkColor() -> UIColor {
+        return UIColor(red:0.260, green:0.260 ,blue:0.260 , alpha:1.00)
+    }
+
+    class func customLightColor() -> UIColor {
+        return UIColor(red:0.460, green:0.460 ,blue:0.460 , alpha:1.00)
+    }
+
     class func customBlueColor() -> UIColor {
         return UIColor(red:0.043, green:0.576 ,blue:0.588 , alpha:1.00)
     }
