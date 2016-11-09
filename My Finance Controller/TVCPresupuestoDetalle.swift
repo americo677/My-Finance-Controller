@@ -38,7 +38,7 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
 
     @IBOutlet var tvPresupuesto: UITableView!
     
-    @IBOutlet weak var bbtnReceipt: UIBarButtonItem!
+    //@IBOutlet weak var bbtnReceipt: UIBarButtonItem!
     
     var moc = DataController().managedObjectContext
     
@@ -61,8 +61,6 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
     var indexSelected: IndexPath = IndexPath()
     let strAppTitle = "My Finance Controller"
     
-    let MAX_ROW_HEIGHT: CGFloat = 50
-    let MAX_SECTION_ROW_HEIGHT: CGFloat = 55
 
     enum eTipoRegistro: Int {
         case income = 0
@@ -70,7 +68,7 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
     }
 
     func initTableViewRowHeight() {
-        self.tvPresupuesto.rowHeight = MAX_ROW_HEIGHT
+        self.tvPresupuesto.rowHeight = CCGlobal().MAX_ROW_HEIGHT_DETAIL
     }
 
     func initFormatters() {
@@ -221,10 +219,61 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         
     }
     
+    func loadPreferences() {
+        
+        // inicializar los placeholder de los UITextField que lo requieran
+        //txtMonto.placeholder  = "Monto del préstamo"
+        
+        // Para UITextField de entrada numérica
+        //self.txtMonto.keyboardType = .decimalPad
+        
+        let rightButton = UIBarButtonItem(title: "Receipt", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.btnReceiptOnTouchInsideDonw(_:)))
+        
+        let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: self, action: nil)
+        
+        
+        // Bar title text color
+        //let shadow = NSShadow()
+        //shadow.shadowColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        //shadow.shadowOffset = CGSize(0, 1)
+        
+        let color = UIColor.white
+        
+        let titleFont : UIFont = UIFont(name: CCGlobal().FONT_NAME_TITLE_NAVIGATION_BAR, size: 14)!
+        
+        let attributes = [
+            NSForegroundColorAttributeName : color,
+            //NSShadowAttributeName : shadow,
+            NSFontAttributeName : titleFont
+        ]
+        
+        
+        rightButton.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        
+        backButton.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        
+        
+        self.navigationItem.rightBarButtonItem = rightButton
+        
+        
+        self.navigationItem.backBarButtonItem = backButton
+        
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let identifier = "presupuestoDetalleCell"
+        let myBundle = Bundle(for: TVCPresupuestoDetalle.self)
+        let nib = UINib(nibName: "PresupuestoDetalleCell", bundle: myBundle)
+        
+        self.tvPresupuesto.register(nib, forCellReuseIdentifier: identifier)
+        
+        
+        
         //self.tvPresupuesto.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier: "CellPresupuestoDetalle")
+        
+        self.loadPreferences()
         
         self.tvPresupuesto.register(UITableViewHeaderFooterView.classForCoder(), forHeaderFooterViewReuseIdentifier: "customHeaderView")
         
@@ -245,6 +294,7 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
             self.toolbarItems = items as? [UIBarButtonItem]
         #endif
         
+        /*
         let sublayer = CALayer.init()
         sublayer.backgroundColor = UIColor.customLightGrayColor().cgColor
         sublayer.shadowOffset = CGSize(width: 0, height: 3)
@@ -252,11 +302,10 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         sublayer.shadowOpacity = 0.8;
         sublayer.frame = CGRect(x: 0, y: 0, width: 420, height: 42000)
         self.view.layer.addSublayer(sublayer)
+        */
         
         self.title = self.presupuesto?.descripcion
         
-        self.navigationItem.backBarButtonItem?.title = "" // = backItem
-
         // Uncomment the following line to preserve selection between presentations
         self.clearsSelectionOnViewWillAppear = false
 
@@ -296,24 +345,29 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
                 }
                 
                 if intTotalRecibos < CCGlobal().MAX_RECEIPTS_FOR_BUDGETS_LITE_VERSION {
-                    bbtnReceipt.enabled = true
+                    //bbtnReceipt.enabled = true
+                    self.navigationItem.rightBarButtonItem?.isEnabled = true
                     if self.presupuesto != nil {
                         
                         if secciones.count <= 0 {
-                            bbtnReceipt.enabled = false
+                            //bbtnReceipt.enabled = false
+                            self.navigationItem.rightBarButtonItem?.isEnabled = false
                             showCustomWarningAlert("You must record at least a section!.", toFocus: nil)
                         } else {
                             let seccion = secciones[0]
                             
                             if seccion.descripcion != "" {
-                                bbtnReceipt.enabled = true
+                                //bbtnReceipt.enabled = true
+                                        self.navigationItem.rightBarButtonItem?.isEnabled = true
                             } else {
-                                bbtnReceipt.enabled = false
+                                //bbtnReceipt.enabled = false
+                                        self.navigationItem.rightBarButtonItem?.isEnabled = false
                             }
                         }
                     }
                 } else if intTotalRecibos == CCGlobal().MAX_RECEIPTS_FOR_BUDGETS_LITE_VERSION {
-                    bbtnReceipt.enabled = false
+                    //bbtnReceipt.enabled = false
+                            self.navigationItem.rightBarButtonItem?.isEnabled = false
                     
                 }
                 //print("Total recibos en Detalles: \(self.intTotalRecibos)")
@@ -321,21 +375,26 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         #endif
         
         #if FULL_VERSION
-            self.bbtnReceipt.isEnabled = true
+            //self.bbtnReceipt.isEnabled = true
+                    self.navigationItem.rightBarButtonItem?.isEnabled = true
             if self.presupuesto != nil {
                 
                 let secciones = self.presupuesto?.secciones?.allObjects as! [PresupuestoSeccion]
                 
                 if secciones.count <= 0 {
-                    bbtnReceipt.isEnabled = false
+                    //bbtnReceipt.isEnabled = false
+                            self.navigationItem.rightBarButtonItem?.isEnabled = false
+                    
                     showCustomWarningAlert("You must record at least a section!.", toFocus: nil)
                 } else {
                     let seccion = secciones[0]
                     
                     if seccion.descripcion != "" {
-                        bbtnReceipt.isEnabled = true
+                        //bbtnReceipt.isEnabled = true
+                                self.navigationItem.rightBarButtonItem?.isEnabled = true
                     } else {
-                        bbtnReceipt.isEnabled = false
+                        //bbtnReceipt.isEnabled = false
+                                self.navigationItem.rightBarButtonItem?.isEnabled = false
                     }
                 }
             }
@@ -365,12 +424,16 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
     // MARK: - Celda personalizada
     func customTableView(_ ctableView: UITableView, cindexPath: IndexPath, crecibo: Recibo, caccessoryType: UITableViewCellAccessoryType) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellPresupuestoDetalle", for: cindexPath)
+        let identifier = "presupuestoDetalleCell"
+        
+        let cell: PresupuestoDetalleCell = ctableView.dequeueReusableCell(withIdentifier: identifier) as! PresupuestoDetalleCell
+        
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "CellPresupuestoDetalle", for: cindexPath)
         
         // Para evitar el re-writting de los labels personalizados
-        for cellView in cell.contentView.subviews {
-            cellView.removeFromSuperview()
-        }
+        //for cellView in cell.contentView.subviews {
+        //    cellView.removeFromSuperview()
+        //}
         
         //print("Descripcion: \(crecibo.valueForKey(smModelo.smRecibo.colDescripcion) as! String!)")
         //print("Fecha: \(crecibo.valueForKey(smModelo.smRecibo.colFecha) as! NSDate!)")
@@ -382,8 +445,10 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         let intTipo        = crecibo.value(forKey: smModelo.smRecibo.colTipo) as! Int!
         let strValor       = fmtMoneda.string(from: NSNumber.init(value: crecibo.value(forKey: smModelo.smRecibo.colValor) as! Double))!
         
+        /*
         let fontName =  "Verdana-Bold"
         let fontNameNumeric = "Verdana"
+        
         
         let labelNombre: UILabel = UILabel(frame: CGRect(x: 17.0, y: 0.0, width: 377.0, height: 30.0))
         
@@ -393,28 +458,49 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
         labelNombre.textColor = UIColor.black
         labelNombre.tag = cindexPath.row
         cell.contentView.addSubview(labelNombre)
+        */
+        
+        cell.descripcion.text = strDescripcion
+        cell.descripcion.tag = cindexPath.row
+        
 
+        /*
         let labelFecha: UILabel = UILabel(frame: CGRect(x: 17.0, y: 25.0, width: 100.0, height: 30.0))
         labelFecha.text = "  " + dtFormatter.string(from: dtFecha!)
         labelFecha.font = UIFont(name: fontNameNumeric, size: 12)
         labelFecha.textAlignment = NSTextAlignment.left
         labelFecha.textColor = UIColor.black
         labelFecha.tag = cindexPath.row
-        cell.contentView.addSubview(labelFecha)
+        //cell.contentView.addSubview(labelFecha)
+        */
+        
+        cell.fecha.text = dtFormatter.string(from: dtFecha!)
+        cell.fecha.tag = cindexPath.row
         
         
+        /*
         let labelValor: UILabel = UILabel(frame: CGRect(x: 250.0, y: 25.0, width: 100.0, height: 30.0))
         labelValor.text = String(format: "\(strValor)")
         labelValor.font = UIFont(name: fontNameNumeric, size: 12)
         labelValor.textAlignment = NSTextAlignment.right
         labelValor.tag = cindexPath.row
+        */
+        
         if intTipo == 0 {
-            labelValor.textColor = UIColor.blue
+            //labelValor.textColor = UIColor.blue
+            
+            cell.monto.textColor = UIColor.blue
         } else if intTipo == 1 {
-            labelValor.textColor = UIColor.red
+            //labelValor.textColor = UIColor.red
+            
+            cell.monto.textColor = UIColor.red
         }
-        labelValor.tag = cindexPath.row
-        cell.contentView.addSubview(labelValor)
+ 
+        //labelValor.tag = cindexPath.row
+        cell.monto.text = String(format: "\(strValor)")
+        cell.monto.tag = cindexPath.row
+        
+        //cell.contentView.addSubview(labelValor)
         
         cell.accessoryType = caccessoryType
         
@@ -423,7 +509,7 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return MAX_SECTION_ROW_HEIGHT
+        return CCGlobal().MAX_SECTION_ROW_HEIGHT_DETAIL
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: NSInteger) -> UIView {
@@ -626,7 +712,7 @@ class TVCPresupuestoDetalle: UITableViewController, MFMailComposeViewControllerD
      }
 
     
-    @IBAction func btnReceiptOnTouchInsideDonw(_ sender: UIBarButtonItem) {
+    func btnReceiptOnTouchInsideDonw(_ sender: UIBarButtonItem) {
 
         self.performSegue(withIdentifier: "segueNewRecibo", sender: self)
     }
