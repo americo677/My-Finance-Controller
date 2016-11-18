@@ -34,7 +34,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 
-class TVCCategoria: UITableViewController {
+class TVCCategoria: UITableViewController, DataBudgetDelegate {
     
     let preferencias = UserDefaults.standard
     
@@ -45,6 +45,8 @@ class TVCCategoria: UITableViewController {
     var moc = DataController().managedObjectContext
     
     var presupuesto: Presupuesto?
+    
+    var presupuestoChoosed: Presupuesto? = nil
     
     var presupuestos: [AnyObject] = []
 
@@ -60,6 +62,10 @@ class TVCCategoria: UITableViewController {
     
     func sendToChooseBudget(sender: AnyObject?) {
                 self.performSegue(withIdentifier: "segueCopySections", sender: sender)
+    }
+    
+    func sendDataBudgetBack(_ budget: Presupuesto?) {
+        self.presupuestoChoosed = budget
     }
     
     func btnActionOnTouchInsideup(_ sender: AnyObject) {
@@ -151,20 +157,65 @@ class TVCCategoria: UITableViewController {
         self.view.layer.addSublayer(sublayer)
         */
         
-        loadSections()
         
-        #if FULL_VERSION
-            self.navigationController?.isToolbarHidden = false
-            var items = [AnyObject]()
-            items.append(UIBarButtonItem(title: "Copy sections", style: .plain, target: self,action: #selector(self.btnActionOnTouchInsideup)))
-            self.toolbarItems = items as? [UIBarButtonItem]
-        #endif
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.preferencias.synchronize()
         
+        #if FULL_VERSION
+            
+            var titleButton: String? = "Copy sections from..."
+            
+            if self.presupuestoChoosed != nil {
+                titleButton = "Copy sections from \((self.presupuestoChoosed?.descripcion)!)"
+            }
+            
+            self.navigationController?.isToolbarHidden = false
+            var items = [AnyObject]()
+            items.append(UIBarButtonItem(title:titleButton, style: .plain, target: self,action: #selector(self.btnActionOnTouchInsideup)))
+            self.toolbarItems = items as? [UIBarButtonItem]
+        #endif
+        
+        loadSections()
+        tvCategoria.reloadData()
+    }
+    
+    func updateSectionsFromBudgetChoosed() {
+        if self.presupuestoChoosed != nil {
+            
+            let lpsSeccionDestiny = self.presupuesto?.mutableSetValue(forKey: self.smModelo.smPresupuesto.colSecciones)
+            
+            let lpsSeccionOrigin = self.presupuestoChoosed?.mutableSetValue(forKey: self.smModelo.smPresupuesto.colSecciones)
+
+            // elimina todas las secciones previas del presupuesto destino
+            lpsSeccionDestiny?.removeAllObjects()
+
+            for item in lpsSeccionOrigin! {
+                let sectionOrigin = item as? PresupuestoSeccion
+                
+                let psSeccion = NSEntityDescription.insertNewObject(forEntityName: self.smModelo.smPresupuestoSeccion.entityName, into: self.moc) as? PresupuestoSeccion
+
+                let strSeccion = (sectionOrigin?.descripcion!)! as String
+                
+                psSeccion?.setValue(strSeccion, forKey: self.smModelo.smPresupuestoSeccion.colDescripcion)
+                
+                psSeccion?.setValue(0.0, forKey: self.smModelo.smPresupuestoSeccion.colTotalIngresos)
+                
+                psSeccion?.setValue(0.0, forKey: self.smModelo.smPresupuestoSeccion.colTotalEgresos)
+                
+                lpsSeccionDestiny?.add(psSeccion!)
+                
+            }
+            
+            self.presupuesto?.setValue(lpsSeccionDestiny!, forKey: self.smModelo.smPresupuesto.colSecciones)
+
+            // modifica las secciones origen asociandolas al nuevo presupuesto
+            //lpsSeccionDestiny = lpsSeccionOrigin
+            
+            guardarPresupuesto()
+        }
     }
     
     // MARK: - Alerta personalizada
@@ -187,6 +238,9 @@ class TVCCategoria: UITableViewController {
     }
     
     func loadSections() {
+        
+        updateSectionsFromBudgetChoosed()
+        
         if self.presupuesto != nil {
             let sections = self.presupuesto?.secciones?.allObjects as? [PresupuestoSeccion]
             
@@ -376,6 +430,22 @@ class TVCCategoria: UITableViewController {
 
             var arrSeccion = self.presupuesto?.mutableSetValue(forKey: smModelo.smPresupuesto.colSecciones).allObjects
             
+            self.moc.delete(arrSeccion?[indexPath.row] as! NSManagedObject)
+            
+            arrSeccion?.remove(at: indexPath.row)
+            
+            do {
+                try self.moc.save()
+                self.loadSections()
+                tableView.reloadData()
+            } catch {
+                let deleteError = error as NSError
+                print(deleteError)
+            }
+
+            BudgetServices.sharedInstance.syncBalancesOfBudget(budget: self.presupuesto!, moc: self.moc)
+            
+            /*
             if arrSeccion?.count > 0 {
                 let seccion = arrSeccion![indexPath.row] as? PresupuestoSeccion
                 
@@ -403,7 +473,12 @@ class TVCCategoria: UITableViewController {
                     let deleteError = error as NSError
                     print(deleteError)
                 }
+ 
+                
+                
+                
             }
+            */
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
@@ -438,6 +513,8 @@ class TVCCategoria: UITableViewController {
             if segue.identifier == "segueCopySections" {
                 let vcCopySections: TVCCopySections = segue.destination as! TVCCopySections
                 
+                vcCopySections.delegate = self
+                vcCopySections.moc = self.moc
                 vcCopySections.presupuesto = self.presupuesto
                 
             }

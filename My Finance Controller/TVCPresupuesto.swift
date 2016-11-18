@@ -11,7 +11,7 @@ import CoreData
 
 class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
     
-    @IBOutlet weak var txtvSections: UITextView!
+    //@IBOutlet weak var txtvSections: UITextView!
     
     @IBOutlet weak var stpUmbral: UIStepper!
     
@@ -79,15 +79,61 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
         
         self.txtPresupuesto.text = ""
         
-        self.txtvSections.text = ""
+        //self.txtvSections.text = ""
         
         self.initStepper()
     }
     
+    func loadPreferences() {
+        
+        // inicializar los placeholder de los UITextField que lo requieran
+        //txtMonto.placeholder  = "Monto del préstamo"
+        
+        // Para UITextField de entrada numérica
+        self.txtPresupuesto.keyboardType = .decimalPad
+        
+        let rightButton = UIBarButtonItem(title: "Sections", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.btnSectionsOnTouchInDown(_:)))
+        
+        let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: self, action: nil)
+        
+        
+        // Bar title text color
+        //let shadow = NSShadow()
+        //shadow.shadowColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        //shadow.shadowOffset = CGSize(0, 1)
+        
+        let color = UIColor.white
+        
+        let titleFont : UIFont = UIFont(name: CCGlobal().FONT_NAME_TITLE_NAVIGATION_BAR, size: 14)!
+        
+        let attributes = [
+            NSForegroundColorAttributeName : color,
+            //NSShadowAttributeName : shadow,
+            NSFontAttributeName : titleFont
+        ]
+        
+        
+        rightButton.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        
+        backButton.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        
+        
+        self.navigationItem.rightBarButtonItem = rightButton
+        
+        
+        self.navigationItem.backBarButtonItem = backButton
+        
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.loadPreferences()
+        
         // Do any additional setup after loading the view.
+        /*
         let sublayer = CALayer.init()
         sublayer.backgroundColor = UIColor.customLightGrayColor().cgColor
         sublayer.shadowOffset = CGSize(width: 0, height: 3)
@@ -97,6 +143,7 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
         sublayer.frame = self.view.layer.frame //CGRectMake(30, 30, 128, 192)
         //[self.view.layer addSublayer:sublayer];
         self.view.layer.addSublayer(sublayer)
+        */
                 
         self.initFormatters()
         
@@ -106,7 +153,7 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
         
         self.loadPresupuesto()
         
-        self.loadSections()
+        //self.loadSections()
 
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         
@@ -224,6 +271,7 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
     }
     
     // MARK: - Carga de secciones existentes.
+    /*
     func loadSections() {
         
         self.txtvSections.setNeedsDisplay()
@@ -245,11 +293,12 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
         }
         
     }
+ */
 
     override func viewWillAppear(_ animated: Bool) {
         preferencias.synchronize()
 
-        loadSections()
+        //loadSections()
     }
     
     @IBAction func swPreservarOnValueChanged(_ sender: UISwitch) {
@@ -355,6 +404,7 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
                 showCustomWarningAlert(mensaje!, toFocus: self.txtPresupuestoNombre)
             } else {
                 // validar si existe el presupuesto
+                
                 let existe = existePresupuesto(nombrePresupuesto: self.txtPresupuestoNombre.text!)
                 
                 if existe {
@@ -362,6 +412,7 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
                     isComplete = false
                     showCustomWarningAlert(mensaje!, toFocus: self.txtPresupuestoNombre)
                 }
+                
             }
             
             if !self.txtFechaIni.hasText {
@@ -416,7 +467,7 @@ class TVCPresupuesto: UIViewController, UITextFieldDelegate  {
         return canISave
     }
     
-    @IBAction func btnSectionsOnTouchInDown(_ sender: UIBarButtonItem) {
+    func btnSectionsOnTouchInDown(_ sender: UIBarButtonItem) {
 
         self.boolGuardado = self.guardarPresupuesto()
         

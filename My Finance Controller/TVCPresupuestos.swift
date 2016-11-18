@@ -12,7 +12,7 @@ import CoreData
 //class TVCPresupuestos: UITableViewController {
 
 
-class TVCPresupuestos: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TVCPresupuestos: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
 
     @IBOutlet var tableView: UITableView!
     
@@ -50,7 +50,8 @@ class TVCPresupuestos: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     var intSelectedIndex : Int = -1
         
-        
+    //let tapRecognizer: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action:"#selector(imageOnTouchInsideUp(_:))")
+    
     
     //let MAX_ROW_HEIGHT: CGFloat = 93
     
@@ -71,8 +72,16 @@ class TVCPresupuestos: UIViewController, UITableViewDelegate, UITableViewDataSou
     // MARK: - Consulta a la BD los presupuestos registrados
     func fetchPresupuestos() {
         
+        
+        //let sortDescriptor = NSSortDescriptor(key: "secciones.recibos.fecha", ascending: false)
+        
+        
+       // fetchRequest.sortDescriptors = [sortDescriptor]
+        
         // Initialize Fetch Request
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: smModelo.smPresupuesto.entityName)
+        
+        //fetchRequest.sortDescriptors = [sortDescriptor]
         
         let predicado: NSPredicate =  NSPredicate(format: " activo = true ")
 
@@ -288,6 +297,39 @@ class TVCPresupuestos: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     // MARK: - Procedimientos para carga de la vista
     
+    func btnActionOnTouchInsideup(_ sender: AnyObject) {
+        
+        let alertController = UIAlertController(title: self.strAppTitle, message: "This action can synchronize the balances for all budgets", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            print(action)
+        }
+        
+        let oneAction = UIAlertAction(title: "Sync", style: .default) { (_) in
+            
+            
+            if self.presupuestos.count > 0 {
+                for budget in self.presupuestos {
+                    let b = budget as! Presupuesto
+                    
+                    if b.descripcion != nil {
+                        BudgetServices.sharedInstance.syncBalancesOfBudget(budget: b, moc: self.moc)
+                    }
+                }
+            }
+            
+            self.tableView.reloadData()
+            self.showCustomWarningAlert("The sync has been finished!", toFocus: nil)
+        }
+        
+        alertController.addAction(oneAction)
+        alertController.addAction(cancelAction)
+
+        self.present(alertController, animated: true) {
+        }
+        
+    }
+
     func loadPreferences() {
         
         // inicializar los placeholder de los UITextField que lo requieran
@@ -353,6 +395,25 @@ class TVCPresupuestos: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
+        //UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+         //   initWithTarget:self action:@selector(ClickEventOnImage:)];
+        
+        //[tapRecognizer setNumberOfTouchesRequired:2];
+        //[tapRecognizer setDelegate:self];
+        //Don't forget to set the userInteractionEnabled to YES, by default It's NO.
+        //myImageView.userInteractionEnabled = YES;
+        //[myImageView addGestureRecognizer:tapRecognizer];
+        
+        
+        //tapRecognizer.delegate = self
+        //tapRecognizer.numberOfTouchesRequired = 1
+        //tapRecognizer.numberOfTapsRequired = 1
+        
+        
+        
         
         //self.navigationItem.backBarButtonItem?.title = "" // = backItem
         
@@ -436,6 +497,12 @@ class TVCPresupuestos: UIViewController, UITableViewDelegate, UITableViewDataSou
         //self.navigationItem.leftBarButtonItem = self.editButtonItem
         
         //self.navigationItem.leftBarButtonItem?.action = #selector(self.setEnableDisableButton)
+        
+        self.navigationController?.isToolbarHidden = false
+        var items = [AnyObject]()
+        items.append(UIBarButtonItem(title: "Sync budgets", style: .plain, target: self,action: #selector(self.btnActionOnTouchInsideup)))
+        self.toolbarItems = items as? [UIBarButtonItem]
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -467,6 +534,41 @@ class TVCPresupuestos: UIViewController, UITableViewDelegate, UITableViewDataSou
         self.tableView.deselectRow(at: indexSelected, animated: true)
         self.tableView.reloadData()
     }
+    
+    /*
+    func imageOnTouchInsideUp(gestureRecognizer: UIGestureRecognizer) {
+        
+        if (UIGestureRecognizerState.began == gestureRecognizer.state) {
+            // Called on start of gesture, do work here
+            // do nothing
+        //} else if(UIGestureRecognizerStateChanged == gestureRecognizer.state) {
+            // Do repeated work here (repeats continuously) while finger is down
+        //    [ttl appendString:@" changed"];
+        //} else if(UIGestureRecognizerStateEnded == gestureRecognizer.state) {
+            // Do end work here when finger is lifted
+        //    [ttl appendString:@" ended"];
+        } else if(UIGestureRecognizerState.cancelled == gestureRecognizer.state) {
+            // Do end work here when finger is lifted
+            if self.presupuesto?.descripcion != nil {
+                BudgetServices.sharedInstance.syncBalancesOfBudget(budget: self.presupuesto!, moc: self.moc)
+            }
+        //} else if(UIGestureRecognizerStateFailed == gestureRecognizer.state) {
+            // Do end work here when finger is lifted
+        //    [ttl appendString:@" failed"];
+        } else
+            // UIGestureRecognizerStateRecognized is the same as UIGestureRecognizerStateEnded
+            //if(UIGestureRecognizerStateRecognized == gestureRecognizer.state) {
+            //    // Do end work here when finger is lifted
+            //    [ttl appendString:@" recognized"];
+            //} else
+            if(UIGestureRecognizerState.possible == gestureRecognizer.state) {
+                // Do end work here when finger is lifted
+                // do nothing
+        }
+
+    }
+    */
+    
     
     // MARK: - Table view data source
 
@@ -558,6 +660,10 @@ class TVCPresupuestos: UIViewController, UITableViewDelegate, UITableViewDataSou
                 //for cellView in (cell.contentView.subviews) {
                 //    cellView.removeFromSuperview()
                 //}
+                
+                //cell.ivSync?.isUserInteractionEnabled = true
+                //cell.ivSync?.addGestureRecognizer(self.tapRecognizer)
+                
                 
                 let strTitulo = (self.presupuesto?.descripcion)! as String
                 
@@ -733,20 +839,29 @@ class TVCPresupuestos: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
 
-    /*
     // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
     /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
+    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
+        let budget = self.presupuestos[fromIndexPath.row]
+        
+        self.presupuestos.remove(at: fromIndexPath.row)
+        self.presupuestos.insert(budget, at: toIndexPath.row)
+        do {
+            try self.moc.save()
+            
+            //tableView.deleteRows(at: [indexPath], with: .fade)
+        } catch {
+            let deleteError = error as NSError
+            print(deleteError)
+        }
     }
     */
+    
+    // Override to support conditional rearranging of the table view.
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the item to be re-orderable.
+        return false
+    }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

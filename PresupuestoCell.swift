@@ -22,14 +22,18 @@ class PresupuestoCell: UITableViewCell {
     
     @IBOutlet weak var valorEgresos: UILabel!
     
+    @IBOutlet weak var ivSync: UIImageView!
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String!) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        //self.ivSync.isUserInteractionEnabled = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        //self.ivSync.isUserInteractionEnabled = true
     }
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

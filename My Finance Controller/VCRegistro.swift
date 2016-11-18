@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, DataBudgetDelegate {
     
     
     @IBOutlet weak var tfSeccion: UITextField!
@@ -23,7 +23,12 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     
     @IBOutlet weak var tfReciboMonto: UITextField!
     
-    @IBOutlet weak var bbtnSave: UIBarButtonItem!
+    //@IBOutlet weak var bbtnSave: UIBarButtonItem!
+    
+    @IBOutlet weak var pickedImage: UIImageView!
+    
+    var imageSentIt: UIImage?
+    
     
     var moc = DataController().managedObjectContext
     
@@ -257,6 +262,7 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
 
     }
     
+    // MARK: - Inicializadores de controles para la carga inicial de la vista
     func initDatePickers() {
         dtpFecha.date = Date()
         dtpFecha.datePickerMode = UIDatePickerMode.date
@@ -308,22 +314,81 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     
     func loadReciboParaEdicion() {
         if self.recibo != nil {
-            self.tfSeccion.text = self.seccion?.descripcion
+            //self.tfSeccion.text = self.seccion?.descripcion
+            self.tfSeccion.text = self.recibo?.seccion?.descripcion
             self.tfSeccion.isEnabled = false
             self.tfSeccion.backgroundColor = UIColor.lightGray
             self.tfReciboDescripcion.text = self.recibo!.value(forKey: smModelo.smRecibo.colDescripcion) as! String!
+            self.tfReciboDescripcion.backgroundColor = UIColor.white
             self.tfFechaRegistro.text     = dtFormatter.string(from: self.recibo!.value(forKey: smModelo.smRecibo.colFecha) as! Date!)
             self.tfTipoRegistro.text      = self.arrTipoRegistro[self.recibo!.value(forKey: smModelo.smRecibo.colTipo) as! Int]
             self.tfTipoRegistro.isEnabled = false
             self.tfTipoRegistro.backgroundColor = UIColor.lightGray
             self.intTipoRegistroSeleccionado = self.recibo!.value(forKey: smModelo.smRecibo.colTipo) as? Int
             self.tfReciboMonto.text       = formatterMon.string(from: NSNumber.init(value: self.recibo!.value(forKey: smModelo.smRecibo.colValor) as! Double))
+            self.tfReciboMonto.backgroundColor = UIColor.white
         }
     }
 
+    func loadPreferences() {
+        
+        // inicializar los placeholder de los UITextField que lo requieran
+        //txtMonto.placeholder  = "Monto del préstamo"
+        
+        // Para UITextField de entrada numérica
+        //self.txtMonto.keyboardType = .decimalPad
+        self.tfReciboMonto.keyboardType = .decimalPad
+        
+        let rightButton = UIBarButtonItem(title: "Save", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.btnSaveOnTouchInsideDown(_:)))
+        
+        let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: self, action: nil)
+        
+        
+        // Bar title text color
+        //let shadow = NSShadow()
+        //shadow.shadowColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        //shadow.shadowOffset = CGSize(0, 1)
+        
+        let color = UIColor.white
+        
+        let titleFont : UIFont = UIFont(name: CCGlobal().FONT_NAME_TITLE_NAVIGATION_BAR, size: 14)!
+        
+        let attributes = [
+            NSForegroundColorAttributeName : color,
+            //NSShadowAttributeName : shadow,
+            NSFontAttributeName : titleFont
+        ]
+        
+        
+        rightButton.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        
+        backButton.setTitleTextAttributes(attributes, for: UIControlState.normal)
+        
+        
+        self.navigationItem.rightBarButtonItem = rightButton
+        
+        
+        self.navigationItem.backBarButtonItem = backButton
+        
+    }
+    
+    /*
+    func sendDataImageReceipt(_ image: UIImage?) {
+        pickedImage.image = image
+        pickedImage.contentMode = .scaleAspectFit
+        pickedImage.clipsToBounds = true
+        //UIViewContentMode = .center
+        print("Debería mostrar la imagen hasta este punto")
+        
+    }
+    */
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.loadPreferences()
+        
+        /*
         let sublayer = CALayer.init()
         sublayer.backgroundColor = UIColor.customLightGrayColor().cgColor
         sublayer.shadowOffset = CGSize(width: 0, height: 3)
@@ -331,6 +396,7 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         sublayer.shadowOpacity = 0.8;
         sublayer.frame = CGRect(x: 0, y: 0, width: 420, height: 4200)
         self.view.layer.addSublayer(sublayer)
+        */
         
         self.initFormatters()
         
@@ -343,7 +409,13 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         self.view.addGestureRecognizer(tap)
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
+        
+        //if imageSentIt != nil {
+        //    self.pickedImage.image = self.imageSentIt!
+        //}
+        
         #if LITE_VERSION
             self.intTotalRecibos = 0
             if self.presupuesto != nil {
@@ -354,19 +426,39 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
                 }
                 
                 if self.intTotalRecibos < CCGlobal().MAX_RECEIPTS_FOR_BUDGETS_LITE_VERSION {
-                    bbtnSave.enabled = true
+                    //bbtnSave.enabled = true
+                    self.navigationItem.rightBarButtonItem?.isEnabled = true
                 } else {
-                    bbtnSave.enabled = false
+                    //bbtnSave.enabled = false
+                    self.navigationItem.rightBarButtonItem?.isEnabled = false
                 }
                 print("Total recibos en Recibos: \(self.intTotalRecibos)")
             }
         #endif
         
         #if FULL_VERSION
-            self.bbtnSave.isEnabled = true
+            //self.bbtnSave.isEnabled = true
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
+            
         #endif
 
     }
+    
+    /*
+    @IBAction func btnTakeAPhotoOnTouchUpInside(_ sender: UIButton) {
+        
+        self.performSegue(withIdentifier: "segueScanDocument", sender: self)
+        
+    }
+    */
+    /*
+    @IBAction func btnSaveOnTouchUpInside(_ sender: UIButton) {
+        let imageData = UIImageJPEGRepresentation(pickedImage.image!, 0.5)
+        let compressedJPEGImage = UIImage(data: imageData!)
+        UIImageWriteToSavedPhotosAlbum(compressedJPEGImage!, nil, nil, nil)
+        
+    }
+    */
     
     // MARK: - Validación de formato numérico
     func validarValorNumericoMon(_ txtValor: String?) -> Bool {
@@ -479,6 +571,7 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
                 
                 recibo!.setValue(monto, forKey: smModelo.smRecibo.colValor)
                 
+                /*
                 if eTipoRegistro.expenditure.hashValue == self.intTipoRegistroSeleccionado {
                     print ("On Add Receipt: \(self.seccion!)")
                     var egreso  = (self.seccion?.value(forKey: smModelo.smPresupuestoSeccion.colTotalEgresos) as? Double)!
@@ -499,6 +592,7 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
                     self.seccion?.setValue(ingreso, forKey: smModelo.smPresupuestoSeccion.colTotalIngresos)
                     self.presupuesto?.setValue(ingresos, forKey: smModelo.smPresupuesto.colIngresos)
                 }
+                */
             }
             
             let lpsRecibo = self.seccion?.mutableSetValue(forKey: self.smModelo.smPresupuestoSeccion.colRecibos)
@@ -512,6 +606,9 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             lpsSeccion?.add(self.seccion!)
             
             self.presupuesto?.setValue(lpsSeccion!, forKey: self.smModelo.smPresupuesto.colSecciones)
+            
+            BudgetServices.sharedInstance.syncBalancesOfBudget(budget: self.presupuesto!, moc: self.moc)
+            
             
         } else {
             if self.tfReciboDescripcion.hasText {
@@ -545,12 +642,12 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
                 isComplete = false
                 showCustomWarningAlert("You must enter the mount of money for the receipt.", toFocus: self.tfReciboMonto)
             } else {
-                let montoPrev: Double = (self.recibo?.valor as? Double)!
+                //let montoPrev: Double = (self.recibo?.valor as? Double)!
                 
                 let monto: Double = (formatterMon.number(from: self.tfReciboMonto.text!)?.doubleValue)!
                 
                 self.recibo!.setValue(monto, forKey: smModelo.smRecibo.colValor)
-                
+                /*
                 if eTipoRegistro.expenditure.hashValue == self.intTipoRegistroSeleccionado {
                     var egreso  = (self.seccion?.value(forKey: smModelo.smPresupuestoSeccion.colTotalEgresos) as? Double)!
                     var egresos = (self.presupuesto?.value(forKey: smModelo.smPresupuesto.colEjecutado) as? Double)!
@@ -576,6 +673,16 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
                     self.seccion?.setValue(ingreso, forKey: smModelo.smPresupuestoSeccion.colTotalIngresos)
                     self.presupuesto?.setValue(ingresos, forKey: smModelo.smPresupuesto.colIngresos)
                 }
+                */
+                //self.seccion?.setValue(lpsRecibo!, forKey: smModelo.smPresupuestoSeccion.colRecibos)
+                
+                //let lpsSeccion = self.presupuesto?.mutableSetValue(forKey: self.smModelo.smPresupuesto.colSecciones)
+                
+                //lpsSeccion?.add(self.seccion!)
+                
+                //self.presupuesto?.setValue(lpsSeccion!, forKey: self.smModelo.smPresupuesto.colSecciones)
+                
+                BudgetServices.sharedInstance.syncBalancesOfBudget(budget: self.presupuesto!, moc: self.moc)
             }
         }
     }
@@ -598,7 +705,7 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
     }
     
     // MARK: - Botón para guardar nuevos registros y cambios
-    @IBAction func btnSaveOnTouchInsideDown(_ sender: UIBarButtonItem) {
+    func btnSaveOnTouchInsideDown(_ sender: UIBarButtonItem) {
         // código para guardar
         
         if self.intTotalRecibos < CCGlobal().MAX_RECEIPTS_FOR_BUDGETS_LITE_VERSION {
@@ -606,7 +713,6 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         } else {
             self.showCustomWarningAlert("This is the demo version.  To enjoy the full version of \(self.strAppTitle) we invite you to obtain the full version.  Thank you!.", toFocus: nil)
         }
-        
     }
     
     // MARK: - Funciones de los UIPickerViews
@@ -655,17 +761,16 @@ class VCRegistro: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
         }
     }
     
-    
-    
-    
-    /*
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "segueBackToBudgetDetails" {
-            let back: TVCPresupuestoDetalle = segue.destinationViewController as! TVCPresupuestoDetalle
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == "segueScanDocument" {
+            //let back: TVCPresupuestoDetalle = segue.destinationViewController as! TVCPresupuestoDetalle
             
-            back.presupuesto = self.presupuesto
-            back.moc         = self.moc
+            //back.presupuesto = self.presupuesto
+            //back.moc         = self.moc
         }
     }
-    */
+    
 }

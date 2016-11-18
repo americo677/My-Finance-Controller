@@ -11,6 +11,7 @@ import UIKit
 
 // Custom Class for Global Values
 open class CCGlobal {
+    
     let MAX_EXECUTIONS_FOR_LITE_VERSION = 30
     let MAX_BUDGETS_LITE_VERSION = 4
     let MAX_SECTIONS_FOR_BUDGETS_LITE_VERSION = 3
@@ -23,6 +24,9 @@ open class CCGlobal {
     
     let FONT_NAME_TITLE_NAVIGATION_BAR = "Verdana"
     let FONT_NAME_TABLEVIEW_SECTION = "Verdana"
+    
+    let APP_TITLE = "My Finance Controller"
 
     //let FONT_NAME_TITLE_NAVIGATION_BAR = "Georgia"
+    
 }

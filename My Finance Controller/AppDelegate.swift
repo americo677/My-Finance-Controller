@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ application: UIApplication) {
-        let nstiEspera: TimeInterval = 5 // segundos
+        let nstiEspera: TimeInterval = 3 // segundos
         Thread.sleep(forTimeInterval: nstiEspera) // Espera de 5 segundos
     }
 

@@ -14,5 +14,20 @@ import CoreData
 class PresupuestoSeccion: NSManagedObject {
 
 // Insert code here to add functionality to your managed object subclass
+    
+    func addRecibo(recibo: Recibo) {
+        let recibos = self.mutableSetValue(forKey: "recibos")
+        recibos.add(recibo)
+    }
 
+    func removeRecibo(recibo: Recibo) {
+        let recibos = self.mutableSetValue(forKey: "recibos")
+         recibos.remove(recibo)
+    }
+    
+    func orderByDateRecibos() -> [Recibo] {
+        let recibos = self.mutableSetValue(forKey: "recibos").sorted(by: { ($0 as! Recibo).fecha! > ($1  as! Recibo).fecha! }) as! [Recibo]
+        
+        return recibos
+    }
 }

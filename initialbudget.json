@@ -16,13 +16,13 @@
                                   "totalEgresos": 124.9,
                                   "recibos": [
                                               {
-                                              "descripcion": "Bill water",
+                                              "descripcion": "Water bill",
                                               "fecha": "15/08/2016",
                                               "tipo": 1,
                                               "valor": 74.9
                                               },
                                               {
-                                              "descripcion": "Bill internet",
+                                              "descripcion": "Internet bill",
                                               "fecha": "20/08/2016",
                                               "tipo": 1,
                                               "valor": 50
