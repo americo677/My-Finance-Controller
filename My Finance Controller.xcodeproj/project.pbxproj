@@ -97,6 +97,10 @@
 		1E772E171DDECD9000530435 /* IconLite50pt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E772E151DDECD9000530435 /* IconLite50pt@2x.png */; };
 		1E772E191DDECD9A00530435 /* IconLite83-5pt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E772E181DDECD9A00530435 /* IconLite83-5pt@2x.png */; };
 		1E81CB0A1D5A77C3002CEC5F /* Verdana.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E81CB091D5A77AB002CEC5F /* Verdana.ttf */; };
+		1EB8EBA61E28A7FA0029CD80 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EB8EBA51E28A7FA0029CD80 /* GoogleMobileAds.framework */; };
+		1EB8EBA71E28A7FA0029CD80 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EB8EBA51E28A7FA0029CD80 /* GoogleMobileAds.framework */; };
+		1EB8EBA91E28A8650029CD80 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1EB8EBA81E28A8650029CD80 /* GoogleService-Info.plist */; };
+		1EB8EBAA1E28A8650029CD80 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1EB8EBA81E28A8650029CD80 /* GoogleService-Info.plist */; };
 		1EBCA64E1D2C32CE00055086 /* TVCPresupuestos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBCA64D1D2C32CE00055086 /* TVCPresupuestos.swift */; };
 		1EBCA6501D2C336500055086 /* TVCPresupuesto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBCA64F1D2C336500055086 /* TVCPresupuesto.swift */; };
 		1EBCA6521D2C33A500055086 /* TVCCategoria.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EBCA6511D2C33A500055086 /* TVCCategoria.swift */; };
@@ -180,6 +184,8 @@
 		1E772E151DDECD9000530435 /* IconLite50pt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IconLite50pt@2x.png"; sourceTree = "<group>"; };
 		1E772E181DDECD9A00530435 /* IconLite83-5pt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IconLite83-5pt@2x.png"; sourceTree = "<group>"; };
 		1E81CB091D5A77AB002CEC5F /* Verdana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Verdana.ttf; sourceTree = "<group>"; };
+		1EB8EBA51E28A7FA0029CD80 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
+		1EB8EBA81E28A8650029CD80 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1EBCA64D1D2C32CE00055086 /* TVCPresupuestos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TVCPresupuestos.swift; sourceTree = "<group>"; };
 		1EBCA64F1D2C336500055086 /* TVCPresupuesto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TVCPresupuesto.swift; sourceTree = "<group>"; };
 		1EBCA6511D2C33A500055086 /* TVCCategoria.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TVCCategoria.swift; sourceTree = "<group>"; };
@@ -205,6 +211,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EB8EBA61E28A7FA0029CD80 /* GoogleMobileAds.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,6 +219,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EB8EBA71E28A7FA0029CD80 /* GoogleMobileAds.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +276,7 @@
 		1E3340671D221EFE001AE9FB = {
 			isa = PBXGroup;
 			children = (
+				1EB8EBAB1E28A8760029CD80 /* Frameworks */,
 				1EC6CD501DCBF9800055A828 /* resources */,
 				1E81CB071D5A74DC002CEC5F /* Fonts */,
 				1EDF244F1D63918E00993433 /* images */,
@@ -300,6 +309,7 @@
 				1E33407A1D221EFE001AE9FB /* Assets.xcassets */,
 				1E33407C1D221EFE001AE9FB /* LaunchScreen.storyboard */,
 				1E33407F1D221EFE001AE9FB /* Info.plist */,
+				1EB8EBA81E28A8650029CD80 /* GoogleService-Info.plist */,
 			);
 			path = "My Finance Controller";
 			sourceTree = "<group>";
@@ -337,6 +347,14 @@
 				1E81CB091D5A77AB002CEC5F /* Verdana.ttf */,
 			);
 			name = Fonts;
+			sourceTree = "<group>";
+		};
+		1EB8EBAB1E28A8760029CD80 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1EB8EBA51E28A7FA0029CD80 /* GoogleMobileAds.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		1EC6CD501DCBF9800055A828 /* resources */ = {
@@ -465,6 +483,7 @@
 				1E772E0E1DDECB7A00530435 /* Icon72pt@1x.png in Resources */,
 				1E33407E1D221EFE001AE9FB /* LaunchScreen.storyboard in Resources */,
 				1E1DB2D01DDE8FB000F51696 /* Icon40pt@3x.png in Resources */,
+				1EB8EBA91E28A8650029CD80 /* GoogleService-Info.plist in Resources */,
 				1E1DB2D21DDE8FB000F51696 /* Icon60pt@3x.png in Resources */,
 				1E4C2CEA1DD3AF2C0066A312 /* PresupuestoDetalleCell.xib in Resources */,
 				1E1DB2CB1DDE8FB000F51696 /* Icon29pt@1x.png in Resources */,
@@ -501,6 +520,7 @@
 				1E772E131DDECD7E00530435 /* IconLite72pt@2x.png in Resources */,
 				1E1DB2ED1DDE929100F51696 /* IconLite60pt@3x.png in Resources */,
 				1E772E171DDECD9000530435 /* IconLite50pt@2x.png in Resources */,
+				1EB8EBAA1E28A8650029CD80 /* GoogleService-Info.plist in Resources */,
 				1E1DB2EA1DDE929100F51696 /* IconLite40pt@2x.png in Resources */,
 				1E1DB2F31DDE934900F51696 /* IconLite57pt@2x.png in Resources */,
 				1E772E191DDECD9A00530435 /* IconLite83-5pt@2x.png in Resources */,
@@ -700,6 +720,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "My Finance Controller/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -717,6 +741,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "My Finance Controller/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -735,6 +763,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Lite";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/My Finance Controller/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -751,6 +783,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Lite";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/My Finance Controller/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
